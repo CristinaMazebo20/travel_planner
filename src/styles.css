@@ -1,1 +1,77 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg-primary: #0A0F2E;
+  --bg-secondary: #11163D;
+  --bg-card: rgba(17, 22, 61, 0.8);
+  --primary: #6C3BD4;
+  --primary-light: #8B5CF6;
+  --secondary: #00D9FF;
+  --accent: #FF2E9A;
+  --text-primary: #F8FAFF;
+  --text-secondary: #A0A8C6;
+  --border: rgba(255,255,255,0.1);
+  --success: #10B981;
+  --danger: #EF4444;
+  --warning: #F59E0B;
+  --glass: rgba(255,255,255,0.05);
+  --glass-border: rgba(255,255,255,0.1);
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  overflow-x: hidden;
+}
+
+/* Scrollbar futurista */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--secondary);
+}
+
+/* Estilo global para selects */
+select {
+  background: rgba(10, 15, 46, 0.9) !important;
+  border: 1px solid rgba(0, 217, 255, 0.3) !important;
+  color: white !important;
+  padding: 14px !important;
+  border-radius: 12px !important;
+  font-size: 1rem !important;
+  cursor: pointer !important;
+  appearance: none !important;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2300D9FF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 14px center !important;
+}
+
+select option {
+  background: #0A0F2E !important;
+  color: white !important;
+  padding: 12px !important;
+}
+
+select:focus {
+  outline: none !important;
+  border-color: #00D9FF !important;
+  box-shadow: 0 0 10px rgba(0, 217, 255, 0.3) !important;
+}
