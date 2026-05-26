@@ -1,3 +1,4 @@
+// modules/destinos/pages/lista-destinos/lista-destinos.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -11,7 +12,6 @@ import { I18nService } from '../../../../core/services/i18n.service';
   standalone: true,
   imports: [CommonModule, RouterModule, FormsModule],
   template: `
-    <!-- Hero Section -->
     <div class="hero-section">
       <div class="hero-content">
         <h1>{{ i18n.t('destinos.hero_title') }} <span>Travel<span>ly</span></span></h1>
@@ -49,7 +49,6 @@ import { I18nService } from '../../../../core/services/i18n.service';
         <p>{{ i18n.t('destinos.destaques_sub') }}</p>
       </div>
 
-      <!-- Resultados da busca -->
       <div *ngIf="filtroNome && !carregando" class="search-result-info">
         <p>🔍 {{ i18n.t('destinos.resultados_para') }}: <strong>"{{ filtroNome }}"</strong> 
         ({{ destinosFiltrados.length }} {{ i18n.t('destinos.resultados_encontrados') }})</p>
@@ -94,13 +93,14 @@ import { I18nService } from '../../../../core/services/i18n.service';
     </div>
   `,
   styles: [`
+    /* Hero Section - Dark Mode (padrão) */
     .hero-section {
       position: relative;
       min-height: 60vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, #0A0F2E 0%, #1A1F4E 100%);
+      background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
       padding: 80px 20px 60px;
       overflow: hidden;
     }
@@ -116,46 +116,36 @@ import { I18nService } from '../../../../core/services/i18n.service';
       font-size: 3.5rem;
       font-weight: 800;
       margin-bottom: 20px;
-      background: linear-gradient(135deg, #fff 0%, #00D9FF 50%, #6C3BD4 100%);
+      background: linear-gradient(135deg, var(--text-primary) 0%, var(--color-secondary) 50%, var(--color-primary) 100%);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
     }
 
     .hero-content h1 span {
-      background: linear-gradient(135deg, #6C3BD4, #FF2E9A);
+      background: linear-gradient(135deg, var(--color-primary), #FF2E9A);
       -webkit-background-clip: text;
       background-clip: text;
     }
 
     .hero-content p {
       font-size: 1.2rem;
-      color: #A0A8C6;
+      color: var(--text-secondary);
       margin-bottom: 40px;
     }
 
     .search-card {
-      background: rgba(255,255,255,0.05);
+      background: var(--bg-card);
       backdrop-filter: blur(10px);
       border-radius: 20px;
       padding: 24px;
-      border: 1px solid rgba(255,255,255,0.1);
-    }
-
-    .search-grid {
-      display: flex;
-      justify-content: center;
-    }
-
-    .search-item-full {
-      width: 100%;
-      max-width: 600px;
+      border: 1px solid var(--border-color);
     }
 
     .search-item-full label {
       display: block;
       font-size: 0.85rem;
-      color: #00D9FF;
+      color: var(--color-secondary);
       margin-bottom: 8px;
       text-align: left;
     }
@@ -167,27 +157,27 @@ import { I18nService } from '../../../../core/services/i18n.service';
 
     .search-input {
       flex: 1;
-      background: rgba(0, 0, 0, 0.3);
-      border: 1px solid rgba(0, 217, 255, 0.3);
+      background: var(--bg-input);
+      border: 1px solid var(--border-color);
       border-radius: 12px;
       padding: 14px 18px;
-      color: white;
+      color: var(--text-primary);
       font-size: 1rem;
       transition: all 0.3s;
     }
 
     .search-input:focus {
       outline: none;
-      border-color: #00D9FF;
+      border-color: var(--color-secondary);
       box-shadow: 0 0 10px rgba(0, 217, 255, 0.2);
     }
 
     .search-input::placeholder {
-      color: #6B7280;
+      color: var(--text-muted);
     }
 
     .search-btn {
-      background: linear-gradient(135deg, #6C3BD4, #00D9FF);
+      background: var(--gradient-primary);
       border: none;
       color: white;
       padding: 14px 32px;
@@ -199,44 +189,7 @@ import { I18nService } from '../../../../core/services/i18n.service';
 
     .search-btn:hover {
       transform: translateY(-2px);
-      box-shadow: 0 4px 20px rgba(108,59,212,0.4);
-    }
-
-    .search-result-info {
-      background: rgba(0, 217, 255, 0.1);
-      border: 1px solid rgba(0, 217, 255, 0.2);
-      border-radius: 12px;
-      padding: 12px 20px;
-      margin-bottom: 24px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    .search-result-info p {
-      color: #A0A8C6;
-      margin: 0;
-    }
-
-    .search-result-info strong {
-      color: #00D9FF;
-    }
-
-    .btn-clear-filter {
-      background: rgba(239, 68, 68, 0.2);
-      border: 1px solid rgba(239, 68, 68, 0.3);
-      border-radius: 8px;
-      padding: 6px 14px;
-      color: #EF4444;
-      cursor: pointer;
-      transition: all 0.2s;
-      font-size: 0.85rem;
-    }
-
-    .btn-clear-filter:hover {
-      background: rgba(239, 68, 68, 0.3);
+      box-shadow: 0 4px 20px rgba(108, 59, 212, 0.4);
     }
 
     .hero-bg {
@@ -254,7 +207,7 @@ import { I18nService } from '../../../../core/services/i18n.service';
       left: -20%;
       width: 80%;
       height: 80%;
-      background: radial-gradient(circle, rgba(108,59,212,0.3) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(108, 59, 212, 0.3) 0%, transparent 70%);
       border-radius: 50%;
     }
 
@@ -264,7 +217,7 @@ import { I18nService } from '../../../../core/services/i18n.service';
       right: -20%;
       width: 80%;
       height: 80%;
-      background: radial-gradient(circle, rgba(0,217,255,0.2) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(0, 217, 255, 0.2) 0%, transparent 70%);
       border-radius: 50%;
     }
 
@@ -282,11 +235,48 @@ import { I18nService } from '../../../../core/services/i18n.service';
     .section-header h2 {
       font-size: 2rem;
       margin-bottom: 12px;
-      color: white;
+      color: var(--text-primary);
     }
 
     .section-header p {
-      color: #A0A8C6;
+      color: var(--text-secondary);
+    }
+
+    .search-result-info {
+      background: var(--bg-hover);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 12px 20px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .search-result-info p {
+      color: var(--text-secondary);
+      margin: 0;
+    }
+
+    .search-result-info strong {
+      color: var(--color-secondary);
+    }
+
+    .btn-clear-filter {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 8px;
+      padding: 6px 14px;
+      color: #EF4444;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 0.85rem;
+    }
+
+    .btn-clear-filter:hover {
+      background: rgba(239, 68, 68, 0.25);
     }
 
     .destinos-grid {
@@ -296,18 +286,18 @@ import { I18nService } from '../../../../core/services/i18n.service';
     }
 
     .destino-card {
-      background: rgba(17, 22, 61, 0.8);
+      background: var(--bg-card);
       backdrop-filter: blur(10px);
       border-radius: 20px;
       overflow: hidden;
-      border: 1px solid rgba(0,217,255,0.1);
+      border: 1px solid var(--border-color);
       transition: all 0.4s;
     }
 
     .destino-card:hover {
       transform: translateY(-8px);
-      border-color: rgba(0,217,255,0.3);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      border-color: var(--color-secondary);
+      box-shadow: var(--shadow-lg);
     }
 
     .card-image {
@@ -332,7 +322,7 @@ import { I18nService } from '../../../../core/services/i18n.service';
       bottom: 0;
       left: 0;
       right: 0;
-      background: linear-gradient(transparent, rgba(0,0,0,0.7));
+      background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
       padding: 20px;
     }
 
@@ -340,7 +330,7 @@ import { I18nService } from '../../../../core/services/i18n.service';
       color: white;
       font-weight: 700;
       font-size: 1rem;
-      background: rgba(0,0,0,0.5);
+      background: rgba(0, 0, 0, 0.5);
       padding: 4px 12px;
       border-radius: 20px;
     }
@@ -352,11 +342,11 @@ import { I18nService } from '../../../../core/services/i18n.service';
     .card-content h3 {
       font-size: 1.2rem;
       margin-bottom: 6px;
-      color: white;
+      color: var(--text-primary);
     }
 
     .location {
-      color: #00D9FF;
+      color: var(--color-secondary);
       font-size: 0.85rem;
       margin-bottom: 12px;
     }
@@ -373,7 +363,7 @@ import { I18nService } from '../../../../core/services/i18n.service';
     }
 
     .reviews {
-      color: #A0A8C6;
+      color: var(--text-secondary);
       font-size: 0.8rem;
     }
 
@@ -381,8 +371,8 @@ import { I18nService } from '../../../../core/services/i18n.service';
       width: 100%;
       padding: 12px;
       background: transparent;
-      border: 1px solid rgba(0,217,255,0.3);
-      color: #A0A8C6;
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
       border-radius: 30px;
       cursor: pointer;
       transition: all 0.3s;
@@ -390,7 +380,7 @@ import { I18nService } from '../../../../core/services/i18n.service';
     }
 
     .btn-details:hover {
-      background: linear-gradient(135deg, #6C3BD4, #00D9FF);
+      background: var(--gradient-primary);
       border-color: transparent;
       color: white;
     }
@@ -398,7 +388,7 @@ import { I18nService } from '../../../../core/services/i18n.service';
     .loading, .empty-state {
       text-align: center;
       padding: 60px;
-      color: #A0A8C6;
+      color: var(--text-secondary);
     }
 
     .error-message {
@@ -410,11 +400,87 @@ import { I18nService } from '../../../../core/services/i18n.service';
     .btn-retry {
       margin-top: 16px;
       padding: 10px 24px;
-      background: linear-gradient(135deg, #6C3BD4, #00D9FF);
+      background: var(--gradient-primary);
       border: none;
       border-radius: 30px;
       color: white;
       cursor: pointer;
+    }
+
+    /* Light Mode Specific Overrides */
+    body.light-theme .hero-section {
+      background: linear-gradient(135deg, #F8FAFC 0%, #E2E8F0 100%);
+    }
+
+    body.light-theme .search-card {
+      background: #FFFFFF;
+      border-color: #E2E8F0;
+    }
+
+    body.light-theme .search-input {
+      background: #F9FAFB;
+      border-color: #E2E8F0;
+      color: #1E293B;
+    }
+
+    body.light-theme .search-input::placeholder {
+      color: #94A3B8;
+    }
+
+    body.light-theme .destino-card {
+      background: #FFFFFF;
+      border-color: #E2E8F0;
+    }
+
+    body.light-theme .destino-card:hover {
+      border-color: #3B82F6;
+    }
+
+    body.light-theme .card-content h3 {
+      color: #1E293B;
+    }
+
+    body.light-theme .location {
+      color: #3B82F6;
+    }
+
+    body.light-theme .reviews {
+      color: #64748B;
+    }
+
+    body.light-theme .btn-details {
+      border-color: #E2E8F0;
+      color: #64748B;
+    }
+
+    body.light-theme .btn-details:hover {
+      background: linear-gradient(135deg, #6C3BD4, #3B82F6);
+      color: white;
+    }
+
+    body.light-theme .search-result-info {
+      background: #F1F5F9;
+      border-color: #E2E8F0;
+    }
+
+    body.light-theme .search-result-info p {
+      color: #64748B;
+    }
+
+    body.light-theme .section-header h2 {
+      color: #1E293B;
+    }
+
+    body.light-theme .section-header p {
+      color: #64748B;
+    }
+
+    body.light-theme .gradient-1 {
+      background: radial-gradient(circle, rgba(108, 59, 212, 0.1) 0%, transparent 70%);
+    }
+
+    body.light-theme .gradient-2 {
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
     }
 
     @media (max-width: 768px) {

@@ -1,3 +1,4 @@
+// modules/destinos/pages/detalhe-destino/detalhe-destino.ts
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
@@ -89,19 +90,19 @@ import { I18nService } from '../../../../core/services/i18n.service';
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      background: rgba(17, 22, 61, 0.8);
+      background: var(--bg-card, rgba(17, 22, 61, 0.8));
       backdrop-filter: blur(10px);
       padding: 10px 20px;
       border-radius: 30px;
-      color: #A0A8C6;
+      color: var(--text-secondary, #A0A8C6);
       text-decoration: none;
-      border: 1px solid rgba(0,217,255,0.2);
+      border: 1px solid var(--border-color, rgba(0,217,255,0.2));
       transition: all 0.3s;
     }
 
     .btn-back:hover {
-      color: #00D9FF;
-      border-color: #00D9FF;
+      color: var(--color-secondary, #00D9FF);
+      border-color: var(--color-secondary, #00D9FF);
     }
 
     .hero-image {
@@ -134,7 +135,7 @@ import { I18nService } from '../../../../core/services/i18n.service';
     }
 
     .hero-content p {
-      color: #00D9FF;
+      color: var(--color-secondary, #00D9FF);
     }
 
     .content-grid {
@@ -144,17 +145,17 @@ import { I18nService } from '../../../../core/services/i18n.service';
     }
 
     .info-card {
-      background: rgba(17, 22, 61, 0.8);
+      background: var(--bg-card, rgba(17, 22, 61, 0.8));
       backdrop-filter: blur(10px);
       border-radius: 20px;
       padding: 24px;
       margin-bottom: 24px;
-      border: 1px solid rgba(0,217,255,0.1);
+      border: 1px solid var(--border-color, rgba(0,217,255,0.1));
     }
 
     .info-card h2, .info-card h3 {
       margin-bottom: 16px;
-      color: #00D9FF;
+      color: var(--color-secondary, #00D9FF);
     }
 
     .atracoes-grid {
@@ -168,10 +169,11 @@ import { I18nService } from '../../../../core/services/i18n.service';
       padding: 8px 16px;
       border-radius: 20px;
       font-size: 0.85rem;
+      color: var(--text-primary, white);
     }
 
     .price-card {
-      background: linear-gradient(135deg, rgba(108,59,212,0.8), rgba(0,217,255,0.8));
+      background: var(--gradient-primary, linear-gradient(135deg, rgba(108,59,212,0.8), rgba(0,217,255,0.8)));
       backdrop-filter: blur(10px);
       border-radius: 20px;
       padding: 24px;
@@ -196,13 +198,19 @@ import { I18nService } from '../../../../core/services/i18n.service';
       font-weight: 600;
       cursor: pointer;
       margin-top: 16px;
+      transition: all 0.3s;
+    }
+
+    .btn-planejar:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
 
     .rating {
       font-size: 1.5rem;
       font-weight: bold;
       margin-bottom: 8px;
-      color: white;
+      color: var(--text-primary, white);
     }
 
     .stars {
@@ -213,12 +221,12 @@ import { I18nService } from '../../../../core/services/i18n.service';
     .loading, .error-container {
       text-align: center;
       padding: 80px 20px;
-      color: #A0A8C6;
+      color: var(--text-secondary, #A0A8C6);
     }
 
     .error-container h2 {
       margin-bottom: 20px;
-      color: white;
+      color: var(--text-primary, white);
     }
 
     @media (max-width: 768px) {
@@ -231,6 +239,53 @@ import { I18nService } from '../../../../core/services/i18n.service';
       .container {
         padding: 20px 16px 40px;
       }
+    }
+
+    /* Light Mode Specific Styles */
+    body.light-theme .btn-back {
+      background: #FFFFFF;
+      border-color: #E2E8F0;
+      color: #64748B;
+    }
+
+    body.light-theme .btn-back:hover {
+      border-color: #3B82F6;
+      color: #3B82F6;
+    }
+
+    body.light-theme .info-card {
+      background: #FFFFFF;
+      border-color: #E2E8F0;
+    }
+
+    body.light-theme .info-card h2, 
+    body.light-theme .info-card h3 {
+      color: #3B82F6;
+    }
+
+    body.light-theme .atracao-item {
+      background: #F1F5F9;
+      color: #1E293B;
+    }
+
+    body.light-theme .price-card {
+      background: linear-gradient(135deg, #6C3BD4, #3B82F6);
+    }
+
+    body.light-theme .rating {
+      color: #1E293B;
+    }
+
+    body.light-theme .error-container h2 {
+      color: #1E293B;
+    }
+
+    body.light-theme .hero-content h1 {
+      color: white;
+    }
+
+    body.light-theme .hero-content p {
+      color: #00D9FF;
     }
   `]
 })

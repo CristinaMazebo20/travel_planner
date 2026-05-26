@@ -1,3 +1,4 @@
+// modules/viagens/pages/detalhe-viagem/detalhe-viagem.ts
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -224,10 +225,10 @@ interface Viagem {
   styles: [`
     .container { max-width: 1000px; margin: 0 auto; padding: 40px 24px; }
     .back-button { margin-bottom: 24px; }
-    .btn-back { display: inline-flex; align-items: center; gap: 8px; background: rgba(17,22,61,0.8); backdrop-filter: blur(10px); padding: 10px 20px; border-radius: 30px; color: #A0A8C6; text-decoration: none; border: 1px solid rgba(0,217,255,0.2); }
-    .btn-back:hover { color: #00D9FF; border-color: #00D9FF; }
+    .btn-back { display: inline-flex; align-items: center; gap: 8px; background: var(--bg-card, rgba(17,22,61,0.8)); backdrop-filter: blur(10px); padding: 10px 20px; border-radius: 30px; color: var(--text-secondary, #A0A8C6); text-decoration: none; border: 1px solid var(--border-color, rgba(0,217,255,0.2)); transition: all 0.3s; }
+    .btn-back:hover { color: var(--color-secondary, #00D9FF); border-color: var(--color-secondary, #00D9FF); }
     .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px; }
-    .header h1 { font-size: 2rem; color: white; margin: 0; }
+    .header h1 { font-size: 2rem; color: var(--text-primary, white); margin: 0; }
     .status-badge { padding: 6px 16px; border-radius: 30px; font-size: 0.85rem; font-weight: 500; }
     .status-confirmada { background: #10B981; color: white; }
     .status-planejando { background: #F59E0B; color: white; }
@@ -237,39 +238,128 @@ interface Viagem {
     .destino-imagem { height: 300px; border-radius: 24px; overflow: hidden; margin-bottom: 32px; }
     .destino-imagem img { width: 100%; height: 100%; object-fit: cover; }
     .info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-bottom: 32px; }
-    .info-card { background: rgba(17,22,61,0.8); backdrop-filter: blur(10px); border-radius: 20px; padding: 24px; border: 1px solid rgba(0,217,255,0.1); }
-    .info-card h3 { color: #00D9FF; margin-bottom: 16px; }
-    .info-card p { color: #A0A8C6; margin-bottom: 8px; }
-    .info-card p strong { color: white; }
-    .btn-edit-small { margin-top: 12px; padding: 6px 12px; background: rgba(0,217,255,0.1); border: 1px solid rgba(0,217,255,0.3); border-radius: 20px; color: #00D9FF; cursor: pointer; font-size: 0.75rem; }
+    .info-card { background: var(--bg-card, rgba(17,22,61,0.8)); backdrop-filter: blur(10px); border-radius: 20px; padding: 24px; border: 1px solid var(--border-color, rgba(0,217,255,0.1)); }
+    .info-card h3 { color: var(--color-secondary, #00D9FF); margin-bottom: 16px; }
+    .info-card p { color: var(--text-secondary, #A0A8C6); margin-bottom: 8px; }
+    .info-card p strong { color: var(--text-primary, white); }
+    .btn-edit-small { margin-top: 12px; padding: 6px 12px; background: rgba(0,217,255,0.1); border: 1px solid rgba(0,217,255,0.3); border-radius: 20px; color: var(--color-secondary, #00D9FF); cursor: pointer; font-size: 0.75rem; transition: all 0.2s; }
+    .btn-edit-small:hover { background: rgba(0,217,255,0.2); transform: translateY(-2px); }
     
     .actions { display: flex; flex-direction: column; gap: 16px; margin-top: 24px; }
     .actions-group { display: flex; gap: 16px; justify-content: flex-end; flex-wrap: wrap; }
     .btn-editar-dados, .btn-pagar, .btn-concluir, .btn-cancelar { padding: 12px 24px; border-radius: 30px; font-weight: 600; cursor: pointer; transition: all 0.3s; border: none; }
-    .btn-editar-dados { background: linear-gradient(135deg, #6C3BD4, #00D9FF); color: white; }
-    .btn-pagar { background: linear-gradient(135deg, #6C3BD4, #00D9FF); color: white; }
+    .btn-editar-dados { background: var(--gradient-primary, linear-gradient(135deg, #6C3BD4, #00D9FF)); color: white; }
+    .btn-pagar { background: var(--gradient-primary, linear-gradient(135deg, #6C3BD4, #00D9FF)); color: white; }
     .btn-concluir { background: #10B981; color: white; }
     .btn-cancelar { background: transparent; border: 1px solid #EF4444; color: #EF4444; }
+    .btn-editar-dados:hover, .btn-pagar:hover, .btn-concluir:hover, .btn-cancelar:hover { transform: translateY(-2px); }
     
     /* Modal */
     .modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 1000; }
-    .modal-content { background: #1A1F4E; border-radius: 24px; max-width: 500px; width: 90%; overflow: hidden; }
-    .modal-header { display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 1px solid rgba(0,217,255,0.2); }
-    .modal-header h3 { margin: 0; color: white; }
-    .modal-close { background: none; border: none; color: white; font-size: 24px; cursor: pointer; }
+    .modal-content { background: var(--bg-modal, #1A1F4E); border-radius: 24px; max-width: 500px; width: 90%; overflow: hidden; border: 1px solid var(--border-color, rgba(0,217,255,0.2)); }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 1px solid var(--border-color, rgba(0,217,255,0.2)); }
+    .modal-header h3 { margin: 0; color: var(--text-primary, white); }
+    .modal-close { background: none; border: none; color: var(--text-secondary, white); font-size: 24px; cursor: pointer; transition: color 0.2s; }
+    .modal-close:hover { color: #EF4444; }
     .modal-body { padding: 24px; }
-    .modal-footer { display: flex; justify-content: flex-end; gap: 12px; padding: 20px; border-top: 1px solid rgba(0,217,255,0.2); }
+    .modal-footer { display: flex; justify-content: flex-end; gap: 12px; padding: 20px; border-top: 1px solid var(--border-color, rgba(0,217,255,0.2)); }
     .form-group { margin-bottom: 16px; }
-    .form-group label { display: block; margin-bottom: 8px; color: #00D9FF; }
-    .form-control { width: 100%; padding: 12px; background: rgba(10,15,46,0.9); border: 1px solid rgba(0,217,255,0.2); border-radius: 12px; color: white; }
+    .form-group label { display: block; margin-bottom: 8px; color: var(--color-secondary, #00D9FF); }
+    .form-control { width: 100%; padding: 12px; background: var(--bg-input, rgba(10,15,46,0.9)); border: 1px solid var(--border-color, rgba(0,217,255,0.2)); border-radius: 12px; color: var(--text-primary, white); transition: all 0.2s; }
+    .form-control:focus { outline: none; border-color: var(--color-secondary, #00D9FF); }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .btn-cancel, .btn-save, .btn-confirm-cancel { padding: 10px 20px; border-radius: 30px; font-weight: 600; cursor: pointer; }
-    .btn-cancel { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: #A0A8C6; }
-    .btn-save { background: linear-gradient(135deg, #6C3BD4, #00D9FF); border: none; color: white; }
+    .btn-cancel, .btn-save, .btn-confirm-cancel { padding: 10px 20px; border-radius: 30px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+    .btn-cancel { background: transparent; border: 1px solid var(--border-color, rgba(255,255,255,0.2)); color: var(--text-secondary, #A0A8C6); }
+    .btn-save { background: var(--gradient-primary, linear-gradient(135deg, #6C3BD4, #00D9FF)); border: none; color: white; }
     .btn-confirm-cancel { background: #EF4444; border: none; color: white; }
+    .btn-cancel:hover, .btn-save:hover, .btn-confirm-cancel:hover { transform: translateY(-2px); }
     .warning { color: #EF4444; margin-top: 8px; }
-    .error-container { text-align: center; padding: 80px; color: #A0A8C6; }
-    @media (max-width: 768px) { .info-grid { grid-template-columns: 1fr; } .header { flex-direction: column; align-items: flex-start; } .form-row { grid-template-columns: 1fr; } .actions-group { justify-content: center; } }
+    .error-container { text-align: center; padding: 80px; color: var(--text-secondary, #A0A8C6); }
+    
+    @media (max-width: 768px) { 
+      .info-grid { grid-template-columns: 1fr; } 
+      .header { flex-direction: column; align-items: flex-start; } 
+      .form-row { grid-template-columns: 1fr; } 
+      .actions-group { justify-content: center; } 
+    }
+
+    /* Light Mode Specific Styles */
+    body.light-theme .btn-back {
+      background: #FFFFFF;
+      border-color: #E2E8F0;
+      color: #64748B;
+    }
+
+    body.light-theme .btn-back:hover {
+      border-color: #3B82F6;
+      color: #3B82F6;
+    }
+
+    body.light-theme .header h1 {
+      color: #1E293B;
+    }
+
+    body.light-theme .info-card {
+      background: #FFFFFF;
+      border-color: #E2E8F0;
+    }
+
+    body.light-theme .info-card h3 {
+      color: #3B82F6;
+    }
+
+    body.light-theme .info-card p {
+      color: #64748B;
+    }
+
+    body.light-theme .info-card p strong {
+      color: #1E293B;
+    }
+
+    body.light-theme .btn-edit-small {
+      background: #F1F5F9;
+      border-color: #E2E8F0;
+      color: #3B82F6;
+    }
+
+    body.light-theme .btn-edit-small:hover {
+      background: #E2E8F0;
+    }
+
+    body.light-theme .modal-content {
+      background: #FFFFFF;
+    }
+
+    body.light-theme .modal-header {
+      border-bottom-color: #E2E8F0;
+    }
+
+    body.light-theme .modal-header h3 {
+      color: #1E293B;
+    }
+
+    body.light-theme .modal-close {
+      color: #64748B;
+    }
+
+    body.light-theme .form-group label {
+      color: #3B82F6;
+    }
+
+    body.light-theme .form-control {
+      background: #F9FAFB;
+      border-color: #E2E8F0;
+      color: #1E293B;
+    }
+
+    body.light-theme .btn-cancel {
+      border-color: #CBD5E1;
+      color: #64748B;
+    }
+
+    body.light-theme .btn-cancel:hover {
+      background: #F1F5F9;
+    }
   `]
 })
 export class DetalheViagem implements OnInit {
@@ -303,18 +393,15 @@ export class DetalheViagem implements OnInit {
   // ==================== REGRAS DE PERMISSÃO ====================
   
   podeEditarDados(): boolean {
-    // Só pode editar dados se ainda não pagou nada e não está cancelada
     return this.viagem?.status === 'planejando';
   }
 
   podeEditarPagamento(): boolean {
-    // Pode editar pagamento se não está confirmada, cancelada ou concluída
     const status = this.viagem?.status;
     return status !== 'confirmada' && status !== 'cancelada' && status !== 'concluida';
   }
 
   podeCancelar(): boolean {
-    // Pode cancelar se não está cancelada ou concluída
     const status = this.viagem?.status;
     return status !== 'cancelada' && status !== 'concluida';
   }

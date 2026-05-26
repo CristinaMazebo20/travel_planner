@@ -475,7 +475,26 @@ export const TRADUCOES: Record<string, Record<Language, string>> = {
 'destinos.resultados_para': { pt: 'Resultados para', en: 'Results for', fr: 'Résultats pour' },
 'destinos.resultados_encontrados': { pt: 'resultados encontrados', en: 'results found', fr: 'résultats trouvés' },
 'destinos.limpar_filtro': { pt: 'Limpar filtro', en: 'Clear filter', fr: 'Effacer le filtre' },
-'destinos.nenhum_resultado': { pt: 'Nenhum destino encontrado para esta busca.', en: 'No destinations found for this search.', fr: 'Aucune destination trouvée pour cette recherche.' }
+'destinos.nenhum_resultado': { pt: 'Nenhum destino encontrado para esta busca.', en: 'No destinations found for this search.', fr: 'Aucune destination trouvée pour cette recherche.' },
+// Adicione ao TRADUCOES
+'dashboard.welcome_back': { pt: 'Bem-vindo de volta!', en: 'Welcome back!', fr: 'Bon retour!' },
+'dashboard.stats_destinos': { pt: 'Destinos Ativos', en: 'Active Destinations', fr: 'Destinations Actives' },
+'dashboard.stats_usuarios': { pt: 'Usuários', en: 'Users', fr: 'Utilisateurs' },
+'dashboard.stats_viagens': { pt: 'Viagens', en: 'Trips', fr: 'Voyages' },
+'dashboard.stats_faturamento': { pt: 'Faturamento (K)', en: 'Revenue (K)', fr: 'Chiffre (K)' },
+'dashboard.gerenciar': { pt: 'Gerenciar', en: 'Manage', fr: 'Gérer' },
+'dashboard.visualizar': { pt: 'Visualizar', en: 'View', fr: 'Voir' },
+'dashboard.atividade_recente': { pt: 'Atividade Recente', en: 'Recent Activity', fr: 'Activité Récente' },
+'dashboard.ver_todas': { pt: 'Ver todas', en: 'View all', fr: 'Voir tout' },
+'dashboard.nova_viagem': { pt: 'Nova viagem', en: 'New trip', fr: 'Nouveau voyage' },
+'dashboard.para': { pt: 'para', en: 'to', fr: 'vers' },
+'dashboard.ha_2_horas': { pt: 'Há 2 horas', en: '2 hours ago', fr: 'Il y a 2 heures' },
+'dashboard.novo_usuario': { pt: 'Novo usuário', en: 'New user', fr: 'Nouvel utilisateur' },
+'dashboard.registrado': { pt: 'registrado', en: 'registered', fr: 'enregistré' },
+'dashboard.ha_5_horas': { pt: 'Há 5 horas', en: '5 hours ago', fr: 'Il y a 5 heures' },
+'dashboard.pagamento_recebido': { pt: 'Pagamento recebido', en: 'Payment received', fr: 'Paiement reçu' },
+'dashboard.de': { pt: 'de', en: 'of', fr: 'de' },
+'dashboard.ha_1_dia': { pt: 'Há 1 dia', en: '1 day ago', fr: 'Il y a 1 jour' }
 
 };
 
