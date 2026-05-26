@@ -5,6 +5,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ViagemService } from '../../../../core/services/viagem.service';
 import { DestinoService } from '../../../../core/services/destino.service';
 import { NotificationService } from '../../../../core/services/notification.service';
+import { I18nService } from '../../../../core/services/i18n.service';
 
 interface Viagem {
   id: number;
@@ -30,7 +31,7 @@ interface Viagem {
   template: `
     <div class="container" *ngIf="viagem">
       <div class="back-button">
-        <a routerLink="/minhas-viagens" class="btn-back">← Voltar para minhas viagens</a>
+        <a routerLink="/minhas-viagens" class="btn-back">← {{ i18n.t('detalhe_viagem.voltar') }}</a>
       </div>
 
       <div class="header">
@@ -50,34 +51,34 @@ interface Viagem {
 
       <div class="info-grid">
         <div class="info-card">
-          <h3>📅 Datas da Viagem</h3>
-          <p><strong>Data de início:</strong> {{ viagem.data_inicio | date:'dd/MM/yyyy' }}</p>
-          <p><strong>Data de fim:</strong> {{ viagem.data_fim | date:'dd/MM/yyyy' }}</p>
-          <p><strong>Duração:</strong> {{ calcularDuracao() }} dias</p>
+          <h3>📅 {{ i18n.t('detalhe_viagem.datas_viagem') }}</h3>
+          <p><strong>{{ i18n.t('detalhe_viagem.data_inicio') }}:</strong> {{ viagem.data_inicio | date:'dd/MM/yyyy' }}</p>
+          <p><strong>{{ i18n.t('detalhe_viagem.data_fim') }}:</strong> {{ viagem.data_fim | date:'dd/MM/yyyy' }}</p>
+          <p><strong>{{ i18n.t('detalhe_viagem.duracao') }}:</strong> {{ calcularDuracao() }} {{ i18n.t('detalhe_viagem.dias') }}</p>
           <button *ngIf="podeEditarDados()" class="btn-edit-small" (click)="abrirModalEdicaoDados()">
-            ✏️ Editar datas
+            ✏️ {{ i18n.t('detalhe_viagem.editar_datas') }}
           </button>
         </div>
 
         <div class="info-card">
-          <h3>📍 Destino</h3>
-          <p><strong>Destino:</strong> {{ viagem.destino_nome }}</p>
-          <p><strong>País:</strong> {{ viagem.destino_pais }}</p>
-          <p><strong>Descrição:</strong> {{ viagem.destino_descricao || 'Informações não disponíveis' }}</p>
+          <h3>📍 {{ i18n.t('detalhe_viagem.destino') }}</h3>
+          <p><strong>{{ i18n.t('detalhe_viagem.destino') }}:</strong> {{ viagem.destino_nome }}</p>
+          <p><strong>{{ i18n.t('detalhe_viagem.pais') }}:</strong> {{ viagem.destino_pais }}</p>
+          <p><strong>{{ i18n.t('detalhe_viagem.descricao') }}:</strong> {{ viagem.destino_descricao || i18n.t('detalhe_viagem.descricao_indisponivel') }}</p>
         </div>
 
         <div class="info-card">
-          <h3>💰 Financeiro</h3>
-          <p><strong>Orçamento total:</strong> {{ viagem.orcamento | number }} Kz</p>
-          <p><strong>Valor pago:</strong> {{ (viagem.valor_pago || 0) | number }} Kz</p>
-          <p><strong>Saldo restante:</strong> {{ (viagem.orcamento - (viagem.valor_pago || 0)) | number }} Kz</p>
-          <p *ngIf="viagem.forma_pagamento"><strong>Forma de pagamento:</strong> {{ getFormaPagamentoTexto(viagem.forma_pagamento) }}</p>
+          <h3>💰 {{ i18n.t('detalhe_viagem.financeiro') }}</h3>
+          <p><strong>{{ i18n.t('detalhe_viagem.orcamento_total') }}:</strong> {{ viagem.orcamento | number }} Kz</p>
+          <p><strong>{{ i18n.t('detalhe_viagem.valor_pago') }}:</strong> {{ (viagem.valor_pago || 0) | number }} Kz</p>
+          <p><strong>{{ i18n.t('detalhe_viagem.saldo_restante') }}:</strong> {{ (viagem.orcamento - (viagem.valor_pago || 0)) | number }} Kz</p>
+          <p *ngIf="viagem.forma_pagamento"><strong>{{ i18n.t('detalhe_viagem.forma_pagamento') }}:</strong> {{ getFormaPagamentoTexto(viagem.forma_pagamento) }}</p>
         </div>
 
         <div class="info-card">
-          <h3>📋 Status da Viagem</h3>
-          <p><strong>Status atual:</strong> {{ getStatusTexto(viagem.status) }}</p>
-          <p><strong>Data do planejamento:</strong> {{ viagem.created_at | date:'dd/MM/yyyy HH:mm' }}</p>
+          <h3>📋 {{ i18n.t('detalhe_viagem.status_viagem') }}</h3>
+          <p><strong>{{ i18n.t('detalhe_viagem.status_atual') }}:</strong> {{ getStatusTexto(viagem.status) }}</p>
+          <p><strong>{{ i18n.t('detalhe_viagem.data_planejamento') }}:</strong> {{ viagem.created_at | date:'dd/MM/yyyy HH:mm' }}</p>
         </div>
       </div>
 
@@ -86,24 +87,24 @@ interface Viagem {
         <!-- Editar dados (só aparece se status = planejando) -->
         <div class="actions-group" *ngIf="podeEditarDados()">
           <button class="btn-editar-dados" (click)="abrirModalEdicaoDados()">
-            ✏️ Editar viagem
+            ✏️ {{ i18n.t('detalhe_viagem.editar_viagem') }}
           </button>
         </div>
 
         <!-- Ações de pagamento (aparece se não confirmada/cancelada/concluída) -->
         <div class="actions-group" *ngIf="podeEditarPagamento()">
           <button class="btn-pagar" (click)="abrirModalPagamento()">
-            💳 Adicionar pagamento
+            💳 {{ i18n.t('detalhe_viagem.adicionar_pagamento') }}
           </button>
           <button class="btn-concluir" *ngIf="(viagem.valor_pago || 0) < viagem.orcamento" (click)="abrirModalConcluirPagamento()">
-            ✅ Concluir pagamento
+            ✅ {{ i18n.t('detalhe_viagem.concluir_pagamento') }}
           </button>
         </div>
 
         <!-- Cancelar (só se não cancelada/concluída) -->
         <div class="actions-group" *ngIf="podeCancelar()">
           <button class="btn-cancelar" (click)="abrirModalCancelamento()">
-            ❌ Cancelar viagem
+            ❌ {{ i18n.t('detalhe_viagem.cancelar_viagem') }}
           </button>
         </div>
       </div>
@@ -113,32 +114,32 @@ interface Viagem {
     <div class="modal" *ngIf="modalEdicaoDadosAberto" (click)="fecharModal($event)">
       <div class="modal-content">
         <div class="modal-header">
-          <h3>✏️ Editar Viagem</h3>
+          <h3>✏️ {{ i18n.t('modal.editar_viagem.titulo') }}</h3>
           <button class="modal-close" (click)="fecharModal()">×</button>
         </div>
         <div class="modal-body">
           <div class="form-group">
-            <label>Título da viagem</label>
+            <label>{{ i18n.t('modal.editar_viagem.titulo_viagem') }}</label>
             <input type="text" class="form-control" [(ngModel)]="viagemEdit.titulo">
           </div>
           <div class="form-row">
             <div class="form-group">
-              <label>Data de início</label>
+              <label>{{ i18n.t('modal.editar_viagem.data_inicio') }}</label>
               <input type="date" class="form-control" [(ngModel)]="viagemEdit.data_inicio">
             </div>
             <div class="form-group">
-              <label>Data de fim</label>
+              <label>{{ i18n.t('modal.editar_viagem.data_fim') }}</label>
               <input type="date" class="form-control" [(ngModel)]="viagemEdit.data_fim">
             </div>
           </div>
           <div class="form-group">
-            <label>Orçamento (Kz)</label>
+            <label>{{ i18n.t('modal.editar_viagem.orcamento') }}</label>
             <input type="number" class="form-control" [(ngModel)]="viagemEdit.orcamento">
           </div>
         </div>
         <div class="modal-footer">
-          <button class="btn-cancel" (click)="fecharModal()">Cancelar</button>
-          <button class="btn-save" (click)="salvarEdicaoDados()" [disabled]="salvando">Salvar alterações</button>
+          <button class="btn-cancel" (click)="fecharModal()">{{ i18n.t('common.cancelar') }}</button>
+          <button class="btn-save" (click)="salvarEdicaoDados()" [disabled]="salvando">{{ i18n.t('modal.editar_viagem.salvar') }}</button>
         </div>
       </div>
     </div>
@@ -147,28 +148,28 @@ interface Viagem {
     <div class="modal" *ngIf="modalPagamentoAberto" (click)="fecharModal($event)">
       <div class="modal-content">
         <div class="modal-header">
-          <h3>💳 Adicionar Pagamento</h3>
+          <h3>💳 {{ i18n.t('modal.pagamento.titulo') }}</h3>
           <button class="modal-close" (click)="fecharModal()">×</button>
         </div>
         <div class="modal-body">
           <div class="form-group">
-            <label>Valor a pagar (Kz)</label>
+            <label>{{ i18n.t('modal.pagamento.valor') }}</label>
             <input type="number" class="form-control" [(ngModel)]="valorPagamento" placeholder="0">
-            <small>Saldo restante: {{ (viagem!.orcamento - (viagem!.valor_pago || 0)) | number }} Kz</small>
+            <small>{{ i18n.t('modal.pagamento.saldo_restante') }}: {{ (viagem!.orcamento - (viagem!.valor_pago || 0)) | number }} Kz</small>
           </div>
           <div class="form-group">
-            <label>Forma de pagamento</label>
+            <label>{{ i18n.t('modal.pagamento.forma') }}</label>
             <select class="form-control" [(ngModel)]="formaPagamentoSelecionada">
-              <option value="pix">PIX</option>
-              <option value="cartao">Cartão de Crédito</option>
-              <option value="dinheiro">Dinheiro</option>
-              <option value="transferencia">Transferência Bancária</option>
+              <option value="pix">{{ i18n.t('pagamento.pix') }}</option>
+              <option value="cartao">{{ i18n.t('pagamento.cartao') }}</option>
+              <option value="dinheiro">{{ i18n.t('pagamento.dinheiro') }}</option>
+              <option value="transferencia">{{ i18n.t('pagamento.transferencia') }}</option>
             </select>
           </div>
         </div>
         <div class="modal-footer">
-          <button class="btn-cancel" (click)="fecharModal()">Cancelar</button>
-          <button class="btn-save" (click)="adicionarPagamento()" [disabled]="salvando">Adicionar pagamento</button>
+          <button class="btn-cancel" (click)="fecharModal()">{{ i18n.t('common.cancelar') }}</button>
+          <button class="btn-save" (click)="adicionarPagamento()" [disabled]="salvando">{{ i18n.t('modal.pagamento.adicionar') }}</button>
         </div>
       </div>
     </div>
@@ -177,16 +178,16 @@ interface Viagem {
     <div class="modal" *ngIf="modalConcluirPagamentoAberto" (click)="fecharModal($event)">
       <div class="modal-content">
         <div class="modal-header">
-          <h3>✅ Concluir Pagamento</h3>
+          <h3>✅ {{ i18n.t('modal.concluir_pagamento.titulo') }}</h3>
           <button class="modal-close" (click)="fecharModal()">×</button>
         </div>
         <div class="modal-body">
-          <p>Deseja concluir o pagamento total da viagem?</p>
-          <p><strong>Valor restante:</strong> {{ (viagem!.orcamento - (viagem!.valor_pago || 0)) | number }} Kz</p>
+          <p>{{ i18n.t('modal.concluir_pagamento.mensagem') }}</p>
+          <p><strong>{{ i18n.t('modal.concluir_pagamento.valor_restante') }}:</strong> {{ (viagem!.orcamento - (viagem!.valor_pago || 0)) | number }} Kz</p>
         </div>
         <div class="modal-footer">
-          <button class="btn-cancel" (click)="fecharModal()">Cancelar</button>
-          <button class="btn-save" (click)="concluirPagamento()" [disabled]="salvando">Confirmar pagamento</button>
+          <button class="btn-cancel" (click)="fecharModal()">{{ i18n.t('common.cancelar') }}</button>
+          <button class="btn-save" (click)="concluirPagamento()" [disabled]="salvando">{{ i18n.t('modal.concluir_pagamento.confirmar') }}</button>
         </div>
       </div>
     </div>
@@ -195,29 +196,29 @@ interface Viagem {
     <div class="modal" *ngIf="modalCancelamentoAberto" (click)="fecharModal($event)">
       <div class="modal-content">
         <div class="modal-header">
-          <h3>❌ Cancelar Viagem</h3>
+          <h3>❌ {{ i18n.t('modal.cancelar.titulo') }}</h3>
           <button class="modal-close" (click)="fecharModal()">×</button>
         </div>
         <div class="modal-body">
-          <p>Tem certeza que deseja cancelar esta viagem?</p>
-          <p class="warning">Esta ação não pode ser desfeita.</p>
+          <p>{{ i18n.t('modal.cancelar.mensagem') }}</p>
+          <p class="warning">{{ i18n.t('modal.cancelar.aviso_irreversivel') }}</p>
           <p *ngIf="(viagem!.valor_pago || 0) > 0" class="warning">
-            ⚠️ Você receberá reembolso de {{ (viagem!.valor_pago || 0) | number }} Kz conforme política de cancelamento.
+            ⚠️ {{ i18n.t('modal.cancelar.reembolso') }} {{ (viagem!.valor_pago || 0) | number }} Kz {{ i18n.t('modal.cancelar.reembolso_politica') }}
           </p>
           <p *ngIf="(viagem!.valor_pago || 0) === 0" class="warning">
-            ⚠️ Nenhum valor foi pago, cancelamento gratuito.
+            ⚠️ {{ i18n.t('modal.cancelar.reembolso_zero') }}
           </p>
         </div>
         <div class="modal-footer">
-          <button class="btn-cancel" (click)="fecharModal()">Voltar</button>
-          <button class="btn-confirm-cancel" (click)="confirmarCancelamento()" [disabled]="salvando">Sim, cancelar viagem</button>
+          <button class="btn-cancel" (click)="fecharModal()">{{ i18n.t('modal.cancelar.voltar') }}</button>
+          <button class="btn-confirm-cancel" (click)="confirmarCancelamento()" [disabled]="salvando">{{ i18n.t('modal.cancelar.confirmar') }}</button>
         </div>
       </div>
     </div>
 
     <div *ngIf="!viagem" class="error-container">
-      <h2>Viagem não encontrada</h2>
-      <a routerLink="/minhas-viagens" class="btn-back">Voltar para minhas viagens</a>
+      <h2>{{ i18n.t('detalhe_viagem.viagem_nao_encontrada') }}</h2>
+      <a routerLink="/minhas-viagens" class="btn-back">{{ i18n.t('detalhe_viagem.voltar') }}</a>
     </div>
   `,
   styles: [`
@@ -288,7 +289,8 @@ export class DetalheViagem implements OnInit {
     private viagemService: ViagemService,
     private destinoService: DestinoService,
     private notificationService: NotificationService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    public i18n: I18nService
   ) {}
 
   ngOnInit() {
@@ -321,25 +323,25 @@ export class DetalheViagem implements OnInit {
   
   getStatusTexto(status: string): string {
     const statusMap: any = {
-      'confirmada': '✅ Confirmada',
-      'planejando': '📝 Planejando',
-      'reservada': '📅 Reservada',
-      'aguardando_pagamento': '⏳ Aguardando pagamento',
-      'cancelada': '❌ Cancelada'
+      'confirmada': '✅ ' + this.i18n.t('status.confirmada'),
+      'planejando': '📝 ' + this.i18n.t('status.planejando'),
+      'reservada': '📅 ' + this.i18n.t('status.reservada'),
+      'aguardando_pagamento': '⏳ ' + this.i18n.t('status.aguardando'),
+      'cancelada': '❌ ' + this.i18n.t('status.cancelada')
     };
     return statusMap[status] || status;
   }
 
   getFormaPagamentoTexto(forma: string): string {
     const formaMap: any = {
-      'pagar_agora': 'Pagamento à vista',
-      'sinal': 'Sinal (30%)',
-      'parcelar': 'Parcelado',
-      'reservar': 'Reserva',
-      'pix': 'PIX',
-      'cartao': 'Cartão de Crédito',
-      'dinheiro': 'Dinheiro',
-      'transferencia': 'Transferência Bancária'
+      'pagar_agora': this.i18n.t('pagamento.vista'),
+      'sinal': this.i18n.t('pagamento.sinal'),
+      'parcelar': this.i18n.t('pagamento.parcelado'),
+      'reservar': this.i18n.t('pagamento.reserva'),
+      'pix': this.i18n.t('pagamento.pix'),
+      'cartao': this.i18n.t('pagamento.cartao'),
+      'dinheiro': this.i18n.t('pagamento.dinheiro'),
+      'transferencia': this.i18n.t('pagamento.transferencia')
     };
     return formaMap[forma] || forma;
   }
@@ -364,11 +366,11 @@ export class DetalheViagem implements OnInit {
             this.carregarDetalhesDestino(this.viagem.destino_id);
           }
         } else {
-          this.notificationService.error('Viagem não encontrada');
+          this.notificationService.error(this.i18n.t('detalhe_viagem.viagem_nao_encontrada'));
         }
       },
       error: () => {
-        this.notificationService.error('Erro ao carregar viagem');
+        this.notificationService.error(this.i18n.t('common.erro'));
       }
     });
   }
@@ -409,16 +411,16 @@ export class DetalheViagem implements OnInit {
       next: (response: any) => {
         this.salvando = false;
         if (response.success) {
-          this.notificationService.success('Viagem atualizada com sucesso!');
+          this.notificationService.success(this.i18n.t('common.sucesso'));
           this.fecharModal();
           this.carregarViagem(this.viagemEdit.id);
         } else {
-          this.notificationService.error(response.message || 'Erro ao atualizar viagem');
+          this.notificationService.error(response.message || this.i18n.t('common.erro'));
         }
       },
       error: () => {
         this.salvando = false;
-        this.notificationService.error('Erro de conexão');
+        this.notificationService.error(this.i18n.t('common.erro'));
       }
     });
   }
@@ -438,13 +440,13 @@ export class DetalheViagem implements OnInit {
 
   adicionarPagamento() {
     if (!this.viagem || this.valorPagamento <= 0) {
-      this.notificationService.error('Digite um valor válido');
+      this.notificationService.error(this.i18n.t('common.erro'));
       return;
     }
 
     const saldoRestante = (this.viagem.orcamento || 0) - (this.viagem.valor_pago || 0);
     if (this.valorPagamento > saldoRestante) {
-      this.notificationService.error('Valor excede o saldo restante');
+      this.notificationService.error(this.i18n.t('common.erro'));
       return;
     }
 
@@ -456,16 +458,16 @@ export class DetalheViagem implements OnInit {
       next: (response: any) => {
         this.salvando = false;
         if (response.success) {
-          this.notificationService.success('Pagamento adicionado com sucesso!');
+          this.notificationService.success(this.i18n.t('common.sucesso'));
           this.fecharModal();
           this.carregarViagem(this.viagem!.id);
         } else {
-          this.notificationService.error(response.message || 'Erro ao adicionar pagamento');
+          this.notificationService.error(response.message || this.i18n.t('common.erro'));
         }
       },
       error: () => {
         this.salvando = false;
-        this.notificationService.error('Erro de conexão');
+        this.notificationService.error(this.i18n.t('common.erro'));
       }
     });
   }
@@ -481,16 +483,16 @@ export class DetalheViagem implements OnInit {
       next: (response: any) => {
         this.salvando = false;
         if (response.success) {
-          this.notificationService.success('Pagamento concluído com sucesso! Viagem confirmada.');
+          this.notificationService.success(this.i18n.t('common.sucesso'));
           this.fecharModal();
           this.carregarViagem(this.viagem!.id);
         } else {
-          this.notificationService.error(response.message || 'Erro ao concluir pagamento');
+          this.notificationService.error(response.message || this.i18n.t('common.erro'));
         }
       },
       error: () => {
         this.salvando = false;
-        this.notificationService.error('Erro de conexão');
+        this.notificationService.error(this.i18n.t('common.erro'));
       }
     });
   }
@@ -509,16 +511,16 @@ export class DetalheViagem implements OnInit {
       next: (response: any) => {
         this.salvando = false;
         if (response.success) {
-          this.notificationService.success('Viagem cancelada com sucesso!');
+          this.notificationService.success(this.i18n.t('common.sucesso'));
           this.fecharModal();
           this.router.navigate(['/minhas-viagens']);
         } else {
-          this.notificationService.error(response.message || 'Erro ao cancelar viagem');
+          this.notificationService.error(response.message || this.i18n.t('common.erro'));
         }
       },
       error: () => {
         this.salvando = false;
-        this.notificationService.error('Erro de conexão');
+        this.notificationService.error(this.i18n.t('common.erro'));
       }
     });
   }

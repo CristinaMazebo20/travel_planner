@@ -15,7 +15,8 @@ export const routes: Routes = [
       { path: 'recuperar-senha', loadComponent: () => import('./modules/auth/pages/recuperar-senha/recuperar-senha').then(m => m.RecuperarSenha) },
       { path: 'minhas-viagens', loadComponent: () => import('./modules/viagens/pages/minhas-viagens/minhas-viagens').then(m => m.MinhasViagens) },
       { path: 'planejar', loadComponent: () => import('./modules/viagens/pages/planejar-viagem/planejar-viagem').then(m => m.PlanejarViagem) },
-      { path: 'perfil', loadComponent: () => import('./modules/perfil/pages/perfil/perfil').then(m => m.Perfil) },
+      // app.routes.ts
+      {path: 'perfil',loadComponent: () => import('./modules/perfil/pages/perfil/perfil').then(m => m.Perfil)},
       { path: 'pagamento-sucesso', loadComponent: () => import('./modules/viagens/pages/pagamento-sucesso/pagamento-sucesso').then(m => m.PagamentoSucesso) },
       { path: 'viagem/:id', loadComponent: () => import('./modules/viagens/pages/detalhe-viagem/detalhe-viagem').then(m => m.DetalheViagem) }
     ]

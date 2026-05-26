@@ -6,6 +6,7 @@ import { ViagemService } from '../../../../core/services/viagem.service';
 import { DestinoService, Destino } from '../../../../core/services/destino.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { NotificationService } from '../../../../core/services/notification.service';
+import { I18nService } from '../../../../core/services/i18n.service';
 
 @Component({
   selector: 'app-planejar-viagem',
@@ -14,16 +15,16 @@ import { NotificationService } from '../../../../core/services/notification.serv
   template: `
     <div class="container">
       <div class="page-header">
-        <h1>✈️ Planejar Viagem</h1>
-        <p>Preencha os dados para criar seu roteiro</p>
+        <h1>✈️ {{ i18n.t('planejar.titulo') }}</h1>
+        <p>{{ i18n.t('planejar.subtitulo') }}</p>
       </div>
 
       <div class="form-container">
         <form #viagemForm="ngForm">
           <div class="form-grid">
             <div class="input-group full-width">
-              <label>🌍 Destino</label>
-              <input type="text" list="destinosList" class="form-control" [(ngModel)]="destinoSelecionadoNome" name="destinoSelecionadoNome" placeholder="Digite o nome do destino..." (input)="onDestinoChange()" autocomplete="off">
+              <label>🌍 {{ i18n.t('planejar.destino') }}</label>
+              <input type="text" list="destinosList" class="form-control" [(ngModel)]="destinoSelecionadoNome" name="destinoSelecionadoNome" [placeholder]="i18n.t('planejar.destino_placeholder')" (input)="onDestinoChange()" autocomplete="off">
               <datalist id="destinosList">
                 <option *ngFor="let destino of destinos" [value]="destino.nome">
                   {{ destino.nome }} - {{ destino.cidade }}, {{ destino.pais }} ({{ destino.preco | number }} Kz)
@@ -32,78 +33,78 @@ import { NotificationService } from '../../../../core/services/notification.serv
             </div>
 
             <div class="input-group">
-              <label>📝 Título da viagem</label>
-              <input type="text" class="form-control" [(ngModel)]="viagem.titulo" name="titulo" placeholder="Ex: Férias em Paris" required>
+              <label>📝 {{ i18n.t('planejar.titulo_viagem') }}</label>
+              <input type="text" class="form-control" [(ngModel)]="viagem.titulo" name="titulo" [placeholder]="i18n.t('planejar.titulo_placeholder')" required>
             </div>
 
             <div class="input-group">
-              <label>📅 Data de início</label>
+              <label>📅 {{ i18n.t('planejar.data_inicio') }}</label>
               <input type="date" class="form-control" [(ngModel)]="viagem.data_inicio" name="data_inicio" required>
             </div>
 
             <div class="input-group">
-              <label>📅 Data de fim</label>
+              <label>📅 {{ i18n.t('planejar.data_fim') }}</label>
               <input type="date" class="form-control" [(ngModel)]="viagem.data_fim" name="data_fim" required>
             </div>
 
             <!-- Forma de Pagamento -->
             <div class="input-group full-width">
-              <label>💳 Forma de Pagamento</label>
+              <label>💳 {{ i18n.t('planejar.forma_pagamento') }}</label>
               <div class="payment-options">
                 <label class="payment-option">
                   <input type="radio" value="pagar_agora" [(ngModel)]="formaPagamento" name="formaPagamento">
-                  <span>💰 Pagar agora (100%)</span>
+                  <span>💰 {{ i18n.t('planejar.pagar_agora') }}</span>
                 </label>
                 <label class="payment-option">
                   <input type="radio" value="sinal" [(ngModel)]="formaPagamento" name="formaPagamento">
-                  <span>📝 Pagar sinal (30%) - Restante depois</span>
+                  <span>📝 {{ i18n.t('planejar.sinal') }}</span>
                 </label>
                 <label class="payment-option">
                   <input type="radio" value="reservar" [(ngModel)]="formaPagamento" name="formaPagamento">
-                  <span>📅 Reservar (pagar depois)</span>
+                  <span>📅 {{ i18n.t('planejar.reservar') }}</span>
                 </label>
                 <label class="payment-option">
                   <input type="radio" value="parcelar" [(ngModel)]="formaPagamento" name="formaPagamento">
-                  <span>📆 Parcelar</span>
+                  <span>📆 {{ i18n.t('planejar.parcelar') }}</span>
                 </label>
               </div>
             </div>
 
             <!-- Parcelamento -->
             <div class="input-group" *ngIf="formaPagamento === 'parcelar'">
-              <label>📆 Número de parcelas</label>
+              <label>📆 {{ i18n.t('planejar.numero_parcelas') }}</label>
               <select [(ngModel)]="numeroParcelas" class="form-control" name="numeroParcelas">
-                <option [value]="3">3x sem juros</option>
-                <option [value]="6">6x com juros (5%)</option>
-                <option [value]="12">12x com juros (8%)</option>
+                <option [value]="3">3x {{ i18n.t('planejar.sem_juros') }}</option>
+                <option [value]="6">6x {{ i18n.t('planejar.com_juros_5') }}</option>
+                <option [value]="12">12x {{ i18n.t('planejar.com_juros_8') }}</option>
               </select>
-              <small>Valor por parcela: {{ calcularValorParcela() | number }} Kz</small>
+              <small>{{ i18n.t('planejar.valor_parcela') }}: {{ calcularValorParcela() | number }} Kz</small>
             </div>
           </div>
 
           <!-- Resumo do Pagamento -->
           <div class="payment-summary" *ngIf="orcamentoMinimo > 0">
-            <h4>💰 Resumo do Pagamento</h4>
+            <h4>💰 {{ i18n.t('planejar.resumo_pagamento') }}</h4>
             <div class="summary-row">
-              <span>Valor total da viagem:</span>
+              <span>{{ i18n.t('planejar.valor_total') }}:</span>
               <span>{{ orcamentoMinimo | number }} Kz</span>
             </div>
             <div class="summary-row" *ngIf="formaPagamento === 'sinal'">
-              <span>Sinal (30%):</span>
+              <span>{{ i18n.t('planejar.sinal_valor') }}:</span>
               <span class="highlight">{{ orcamentoMinimo * 0.3 | number }} Kz</span>
             </div>
             <div class="summary-row" *ngIf="formaPagamento === 'sinal'">
-              <span>Restante a pagar:</span>
+              <span>{{ i18n.t('planejar.restante') }}:</span>
               <span>{{ orcamentoMinimo * 0.7 | number }} Kz</span>
             </div>
             <div class="summary-row total" *ngIf="formaPagamento === 'pagar_agora'">
-              <span>Total a pagar agora:</span>
+              <span>{{ i18n.t('planejar.total_pagar') }}:</span>
               <span class="total-value">{{ orcamentoMinimo | number }} Kz</span>
             </div>
             <div class="summary-row" *ngIf="formaPagamento === 'reservar'">
-              <span>Valor a pagar na reserva:</span>
+              <span>{{ i18n.t('planejar.valor_reserva') }}:</span>
               <span>0 Kz</span>
-              <small>(pague até 7 dias antes da viagem)</small>
+              <small>{{ i18n.t('planejar.reserva_obs') }}</small>
             </div>
           </div>
 
@@ -111,7 +112,7 @@ import { NotificationService } from '../../../../core/services/notification.serv
             <button type="button" class="btn-primary" (click)="processarPagamento()" [disabled]="!viagem.destino_id">
               {{ getBotaoTexto() }}
             </button>
-            <button type="button" class="btn-secondary" routerLink="/minhas-viagens">Cancelar</button>
+            <button type="button" class="btn-secondary" routerLink="/minhas-viagens">{{ i18n.t('common.cancelar') }}</button>
           </div>
         </form>
       </div>
@@ -121,28 +122,28 @@ import { NotificationService } from '../../../../core/services/notification.serv
     <div class="modal" *ngIf="modalPagamentoAberto" (click)="fecharModal($event)">
       <div class="modal-content">
         <div class="modal-header">
-          <h3>💳 Pagamento Seguro</h3>
+          <h3>💳 {{ i18n.t('planejar.pagamento_seguro') }}</h3>
           <button class="modal-close" (click)="fecharModal()">×</button>
         </div>
         <div class="modal-body">
           <div class="payment-methods">
             <button class="payment-method" (click)="simularPagamento('cartao')">
-              💳 Cartão de Crédito
+              💳 {{ i18n.t('planejar.cartao_credito') }}
             </button>
             <button class="payment-method" (click)="simularPagamento('pix')">
-              📱 PIX
+              📱 {{ i18n.t('planejar.pix') }}
             </button>
             <button class="payment-method" (click)="simularPagamento('multicaixa')">
-              🏦 Multicaixa
+              🏦 {{ i18n.t('planejar.multicaixa') }}
             </button>
           </div>
           
           <div *ngIf="pagamentoSimulado" class="payment-details">
             <div class="success-icon">✅</div>
-            <h4>Pagamento simulado com sucesso!</h4>
-            <p><strong>Valor:</strong> {{ valorPagamento | number }} Kz</p>
-            <p><strong>Forma:</strong> {{ formaPagamentoSelecionada }}</p>
-            <button class="btn-confirm" (click)="confirmarPagamento()">Confirmar e criar viagem</button>
+            <h4>{{ i18n.t('planejar.pagamento_simulado') }}</h4>
+            <p><strong>{{ i18n.t('planejar.valor') }}:</strong> {{ valorPagamento | number }} Kz</p>
+            <p><strong>{{ i18n.t('planejar.forma') }}:</strong> {{ formaPagamentoSelecionada }}</p>
+            <button class="btn-confirm" (click)="confirmarPagamento()">{{ i18n.t('planejar.confirmar_viagem') }}</button>
           </div>
         </div>
       </div>
@@ -219,7 +220,8 @@ export class PlanejarViagem implements OnInit {
     private destinoService: DestinoService,
     private authService: AuthService,
     private router: Router,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    public i18n: I18nService
   ) {}
 
   ngOnInit() { 
@@ -258,12 +260,12 @@ export class PlanejarViagem implements OnInit {
 
   getBotaoTexto(): string {
     const opcoes: any = {
-      'pagar_agora': '💳 Pagar agora e confirmar viagem',
-      'sinal': '📝 Pagar sinal e reservar',
-      'reservar': '📅 Reservar (pagar depois)',
-      'parcelar': '📆 Parcelar'
+      'pagar_agora': '💳 ' + this.i18n.t('planejar.btn_pagar_agora'),
+      'sinal': '📝 ' + this.i18n.t('planejar.btn_sinal'),
+      'reservar': '📅 ' + this.i18n.t('planejar.btn_reservar'),
+      'parcelar': '📆 ' + this.i18n.t('planejar.btn_parcelar')
     };
-    return opcoes[this.formaPagamento] || 'Continuar';
+    return opcoes[this.formaPagamento] || this.i18n.t('planejar.btn_continuar');
   }
 
   getValorPagamento(): number {
@@ -276,12 +278,12 @@ export class PlanejarViagem implements OnInit {
   processarPagamento() {
     const usuario = this.authService.usuario();
     if (!usuario?.id) {
-      this.notificationService.error('Faça login primeiro');
+      this.notificationService.error(this.i18n.t('planejar.erro_login'));
       this.router.navigate(['/login']);
       return;
     }
     if (!this.viagem.destino_id || !this.viagem.titulo || !this.viagem.data_inicio || !this.viagem.data_fim) {
-      this.notificationService.error('Preencha todos os campos');
+      this.notificationService.error(this.i18n.t('planejar.erro_campos'));
       return;
     }
 
@@ -295,7 +297,12 @@ export class PlanejarViagem implements OnInit {
   }
 
   simularPagamento(forma: string) {
-    this.formaPagamentoSelecionada = forma === 'cartao' ? '💳 Cartão de Crédito' : forma === 'pix' ? '📱 PIX' : '🏦 Multicaixa';
+    const formas: any = {
+      'cartao': '💳 ' + this.i18n.t('planejar.cartao_credito'),
+      'pix': '📱 ' + this.i18n.t('planejar.pix'),
+      'multicaixa': '🏦 ' + this.i18n.t('planejar.multicaixa')
+    };
+    this.formaPagamentoSelecionada = formas[forma];
     this.pagamentoSimulado = true;
   }
 
@@ -351,25 +358,35 @@ export class PlanejarViagem implements OnInit {
       next: (response: any) => {
         this.carregando = false;
         if (response.success) {
-          this.notificationService.success(`Viagem ${status === 'confirmada' ? 'confirmada' : 'planejada'} com sucesso!`);
+          let mensagem = status === 'confirmada' 
+            ? this.i18n.t('planejar.sucesso_confirmada') 
+            : this.i18n.t('planejar.sucesso_planejada');
+          this.notificationService.success(mensagem);
+          
+          let formaPagamentoTexto = '';
+          switch(this.formaPagamento) {
+            case 'pagar_agora': formaPagamentoTexto = this.i18n.t('planejar.pagamento_vista'); break;
+            case 'sinal': formaPagamentoTexto = this.i18n.t('planejar.sinal_texto'); break;
+            case 'parcelar': formaPagamentoTexto = this.i18n.t('planejar.parcelado_texto') + ` ${this.numeroParcelas}x`; break;
+            case 'reservar': formaPagamentoTexto = this.i18n.t('planejar.reserva_texto'); break;
+          }
+          
           this.router.navigate(['/pagamento-sucesso'], {
-  queryParams: {
-    destino: this.destinoSelecionadoNome,
-    data_inicio: this.viagem.data_inicio,
-    data_fim: this.viagem.data_fim,
-    forma_pagamento: this.formaPagamento === 'pagar_agora' ? 'Pagamento à vista' :
-                     this.formaPagamento === 'sinal' ? 'Sinal (30%)' :
-                     this.formaPagamento === 'parcelar' ? `Parcelado em ${this.numeroParcelas}x` : 'Reserva',
-    valor_pago: this.valorPagamento
-  }
-});
+            queryParams: {
+              destino: this.destinoSelecionadoNome,
+              data_inicio: this.viagem.data_inicio,
+              data_fim: this.viagem.data_fim,
+              forma_pagamento: formaPagamentoTexto,
+              valor_pago: this.valorPagamento
+            }
+          });
         } else {
-          this.notificationService.error(response.message || 'Erro ao criar viagem');
+          this.notificationService.error(response.message || this.i18n.t('planejar.erro_criar'));
         }
       },
       error: () => {
         this.carregando = false;
-        this.notificationService.error('Erro de conexão');
+        this.notificationService.error(this.i18n.t('planejar.erro_conexao'));
       }
     });
   }

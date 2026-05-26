@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DestinoService, Destino } from '../../../../core/services/destino.service';
 import { NotificationService } from '../../../../core/services/notification.service';
+import { I18nService } from '../../../../core/services/i18n.service';
+import { ThemeService } from '../../../../core/services/theme.service';
 
 @Component({
   selector: 'app-gestao-destinos',
@@ -14,28 +16,30 @@ import { NotificationService } from '../../../../core/services/notification.serv
     <div class="admin-page">
       <div class="page-header">
         <div class="header-left">
-          <button class="btn-back" (click)="voltar()">← Voltar</button>
-          <h1>📍 Gestão de Destinos</h1>
+          <button class="btn-back" (click)="voltar()">← {{ i18n.t('common.voltar') }}</button>
+          <h1>📍 {{ i18n.t('destinos_admin.titulo') }}</h1>
         </div>
-        <button class="btn-add" (click)="abrirModal()">+ Novo Destino</button>
+        <div class="header-right">
+          <button class="btn-add" (click)="abrirModal()">+ {{ i18n.t('destinos_admin.novo') }}</button>
+        </div>
       </div>
 
       <div class="table-container">
         <div *ngIf="carregando" class="loading">
           <div class="spinner"></div>
-          <p>Carregando destinos...</p>
+          <p>{{ i18n.t('common.carregando') }}</p>
         </div>
 
         <table class="admin-table" *ngIf="!carregando">
           <thead>
             <tr>
               <th>ID</th>
-              <th>Imagem</th>
-              <th>Nome</th>
-              <th>País</th>
-              <th>Cidade</th>
-              <th>Preço</th>
-              <th>Ações</th>
+              <th>{{ i18n.t('destinos_admin.imagem') }}</th>
+              <th>{{ i18n.t('destinos_admin.nome') }}</th>
+              <th>{{ i18n.t('destinos_admin.pais') }}</th>
+              <th>{{ i18n.t('destinos_admin.cidade') }}</th>
+              <th>{{ i18n.t('destinos_admin.preco') }}</th>
+              <th>{{ i18n.t('common.acoes') }}</th>
             </tr>
           </thead>
           <tbody>
@@ -51,14 +55,14 @@ import { NotificationService } from '../../../../core/services/notification.serv
               <td>{{ destino.cidade }}</td>
               <td>{{ destino.preco | number }} Kz</td>
               <td class="actions">
-                <button class="btn-edit" (click)="editar(destino)" title="Editar">✏️</button>
-                <button class="btn-delete" (click)="excluir(destino.id)" title="Excluir">🗑️</button>
-              </td>
+                <button class="btn-edit" (click)="editar(destino)" title="{{ i18n.t('common.editar') }}">✏️</button>
+                <button class="btn-delete" (click)="excluir(destino.id)" title="{{ i18n.t('common.excluir') }}">🗑️</button>
+               </td>
             </tr>
             <tr *ngIf="destinos.length === 0">
               <td colspan="7" class="empty-table">
-                Nenhum destino cadastrado
-              </td>
+                {{ i18n.t('destinos_admin.nenhum_encontrado') }}
+               </td>
             </tr>
           </tbody>
         </table>
@@ -68,42 +72,42 @@ import { NotificationService } from '../../../../core/services/notification.serv
       <div class="modal" *ngIf="modalAberto" (click)="fecharModal()">
         <div class="modal-content" (click)="$event.stopPropagation()">
           <div class="modal-header">
-            <h2>{{ editando ? 'Editar' : 'Novo' }} Destino</h2>
+            <h2>{{ editando ? i18n.t('common.editar') : i18n.t('common.novo') }} {{ i18n.t('destinos_admin.destino') }}</h2>
             <button class="close" (click)="fecharModal()">×</button>
           </div>
           <div class="modal-body">
             <div class="form-group">
-              <label>Nome *</label>
+              <label>{{ i18n.t('destinos_admin.nome') }} *</label>
               <input type="text" [(ngModel)]="destinoForm.nome" class="form-control" required>
             </div>
             <div class="form-group">
-              <label>País *</label>
+              <label>{{ i18n.t('destinos_admin.pais') }} *</label>
               <input type="text" [(ngModel)]="destinoForm.pais" class="form-control" required>
             </div>
             <div class="form-group">
-              <label>Cidade *</label>
+              <label>{{ i18n.t('destinos_admin.cidade') }} *</label>
               <input type="text" [(ngModel)]="destinoForm.cidade" class="form-control" required>
             </div>
             <div class="form-group">
-              <label>Preço (Kz) *</label>
+              <label>{{ i18n.t('destinos_admin.preco') }} (Kz) *</label>
               <input type="number" [(ngModel)]="destinoForm.preco" class="form-control" required>
             </div>
             <div class="form-group">
-              <label>URL da Imagem</label>
+              <label>{{ i18n.t('destinos_admin.imagem') }}</label>
               <input type="text" [(ngModel)]="destinoForm.imagem" class="form-control" placeholder="https://exemplo.com/imagem.jpg">
             </div>
             <div class="form-group">
-              <label>Descrição</label>
-              <textarea rows="3" [(ngModel)]="destinoForm.descricao" class="form-control" placeholder="Descrição do destino..."></textarea>
+              <label>{{ i18n.t('destinos_admin.descricao') }}</label>
+              <textarea rows="3" [(ngModel)]="destinoForm.descricao" class="form-control" [placeholder]="i18n.t('destinos_admin.descricao_placeholder')"></textarea>
             </div>
             <div class="form-group">
-              <label>Avaliação (0-5)</label>
+              <label>{{ i18n.t('destinos_admin.avaliacao') }} (0-5)</label>
               <input type="number" [(ngModel)]="destinoForm.avaliacao" class="form-control" min="0" max="5" step="0.1">
             </div>
           </div>
           <div class="modal-footer">
-            <button class="btn-cancel" (click)="fecharModal()">Cancelar</button>
-            <button class="btn-save" (click)="salvar()" [disabled]="!isFormValido()">Salvar</button>
+            <button class="btn-cancel" (click)="fecharModal()">{{ i18n.t('common.cancelar') }}</button>
+            <button class="btn-save" (click)="salvar()" [disabled]="!isFormValido()">{{ i18n.t('common.salvar') }}</button>
           </div>
         </div>
       </div>
@@ -111,11 +115,28 @@ import { NotificationService } from '../../../../core/services/notification.serv
   `,
   styles: [`
     .admin-page { padding: 24px; }
-    .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+    .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px; }
     .header-left { display: flex; align-items: center; gap: 16px; }
+    .header-right { display: flex; align-items: center; gap: 12px; }
     .btn-back { background: rgba(0, 217, 255, 0.1); border: 1px solid rgba(0, 217, 255, 0.3); padding: 8px 16px; border-radius: 8px; color: #00D9FF; cursor: pointer; transition: all 0.2s; font-size: 0.9rem; }
     .btn-back:hover { background: rgba(0, 217, 255, 0.2); transform: translateX(-2px); }
     .page-header h1 { color: white; margin: 0; font-size: 1.8rem; }
+    
+    /* Language Selector */
+    .lang-selector { position: relative; }
+    .lang-btn { display: flex; align-items: center; gap: 6px; background: rgba(0, 217, 255, 0.1); border: 1px solid rgba(0, 217, 255, 0.3); border-radius: 8px; padding: 8px 12px; color: #00D9FF; cursor: pointer; font-size: 0.85rem; transition: all 0.2s; }
+    .lang-btn:hover { background: rgba(0, 217, 255, 0.2); }
+    .lang-icon { transition: transform 0.2s; }
+    .lang-selector:hover .lang-icon { transform: rotate(180deg); }
+    .lang-dropdown { position: absolute; top: 100%; right: 0; margin-top: 8px; background: var(--bg-card-solid, #11123D); border: 1px solid rgba(0, 217, 255, 0.2); border-radius: 12px; overflow: hidden; min-width: 140px; z-index: 100; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); }
+    .lang-item { display: block; width: 100%; padding: 10px 16px; background: transparent; border: none; color: var(--text-secondary, #A0A8C6); font-size: 0.85rem; cursor: pointer; text-align: left; transition: all 0.2s; }
+    .lang-item:hover { background: rgba(0, 217, 255, 0.1); color: #00D9FF; }
+    .lang-item.active { background: linear-gradient(135deg, #6C3BD4, #00D9FF); color: white; }
+    
+    /* Theme Button */
+    .theme-btn { background: rgba(0, 217, 255, 0.1); border: 1px solid rgba(0, 217, 255, 0.3); border-radius: 8px; width: 36px; height: 36px; cursor: pointer; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+    .theme-btn:hover { background: rgba(0, 217, 255, 0.2); transform: scale(1.05); }
+    
     .btn-add { background: linear-gradient(135deg, #6C3BD4, #00D9FF); border: none; padding: 10px 24px; border-radius: 8px; color: white; cursor: pointer; font-weight: 500; transition: all 0.2s; }
     .btn-add:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(108,59,212,0.3); }
     .table-container { background: rgba(17, 22, 61, 0.8); border-radius: 12px; overflow-x: auto; border: 1px solid rgba(0, 217, 255, 0.1); min-height: 400px; }
@@ -151,6 +172,11 @@ import { NotificationService } from '../../../../core/services/notification.serv
     .btn-save { background: linear-gradient(135deg, #6C3BD4, #00D9FF); border: none; color: white; }
     .btn-cancel:hover, .btn-save:hover { transform: translateY(-2px); }
     .btn-save:disabled { opacity: 0.5; cursor: not-allowed; }
+    
+    @media (max-width: 768px) {
+      .page-header { flex-direction: column; align-items: flex-start; }
+      .header-right { width: 100%; justify-content: flex-end; }
+    }
   `]
 })
 export class GestaoDestinos implements OnInit {
@@ -159,13 +185,23 @@ export class GestaoDestinos implements OnInit {
   editando = false;
   modalAberto = false;
   carregando = true;
+  langMenuOpen = false;
 
   constructor(
     private destinoService: DestinoService,
     private notificationService: NotificationService,
     private cdr: ChangeDetectorRef,
-    private router: Router
-  ) {}
+    private router: Router,
+    public i18n: I18nService,
+    public themeService: ThemeService
+  ) {
+    // Fechar dropdown ao clicar fora
+    document.addEventListener('click', (event) => {
+      if (!(event.target as Element).closest('.lang-selector')) {
+        this.langMenuOpen = false;
+      }
+    });
+  }
 
   ngOnInit() {
     this.carregarDestinos();
@@ -173,6 +209,24 @@ export class GestaoDestinos implements OnInit {
 
   voltar() {
     this.router.navigate(['/admin/dashboard']);
+  }
+
+  getCurrentLangLabel(): string {
+    const labels = { pt: 'PT', en: 'EN', fr: 'FR' };
+    return labels[this.i18n.getCurrentLang()];
+  }
+
+  toggleLangMenu() {
+    this.langMenuOpen = !this.langMenuOpen;
+  }
+
+  setLanguage(lang: 'pt' | 'en' | 'fr') {
+    this.i18n.setLanguage(lang);
+    this.langMenuOpen = false;
+  }
+
+  toggleTheme() {
+    this.themeService.toggleTheme();
   }
 
   abrirModal() {
@@ -196,13 +250,13 @@ export class GestaoDestinos implements OnInit {
         if (response && response.success) {
           this.destinos = response.data || [];
         } else {
-          this.notificationService.error(response?.message || 'Erro ao carregar destinos');
+          this.notificationService.error(response?.message || this.i18n.t('common.erro'));
         }
         this.cdr.detectChanges();
       },
       error: () => {
         this.carregando = false;
-        this.notificationService.error('Erro ao conectar com o servidor');
+        this.notificationService.error(this.i18n.t('common.erro_conexao'));
         this.cdr.detectChanges();
       }
     });
@@ -210,7 +264,7 @@ export class GestaoDestinos implements OnInit {
 
   salvar() {
     if (!this.isFormValido()) {
-      this.notificationService.error('Preencha todos os campos obrigatórios (*)');
+      this.notificationService.error(this.i18n.t('common.erro_campos'));
       return;
     }
     
@@ -218,27 +272,27 @@ export class GestaoDestinos implements OnInit {
       this.destinoService.atualizar(this.destinoForm).subscribe({
         next: (response: any) => {
           if (response && response.success) {
-            this.notificationService.success('Destino atualizado com sucesso!');
+            this.notificationService.success(this.i18n.t('common.sucesso_atualizar'));
             this.carregarDestinos();
             this.fecharModal();
           } else {
-            this.notificationService.error(response?.message || 'Erro ao atualizar');
+            this.notificationService.error(response?.message || this.i18n.t('common.erro'));
           }
         },
-        error: () => this.notificationService.error('Erro ao atualizar destino')
+        error: () => this.notificationService.error(this.i18n.t('common.erro_atualizar'))
       });
     } else {
       this.destinoService.criar(this.destinoForm).subscribe({
         next: (response: any) => {
           if (response && response.success) {
-            this.notificationService.success('Destino criado com sucesso!');
+            this.notificationService.success(this.i18n.t('common.sucesso_criar'));
             this.carregarDestinos();
             this.fecharModal();
           } else {
-            this.notificationService.error(response?.message || 'Erro ao criar');
+            this.notificationService.error(response?.message || this.i18n.t('common.erro'));
           }
         },
-        error: () => this.notificationService.error('Erro ao criar destino')
+        error: () => this.notificationService.error(this.i18n.t('common.erro_criar'))
       });
     }
   }
@@ -250,17 +304,17 @@ export class GestaoDestinos implements OnInit {
   }
 
   excluir(id: number) {
-    if (confirm('Tem certeza que deseja excluir este destino?')) {
+    if (confirm(this.i18n.t('common.confirmar_excluir'))) {
       this.destinoService.deletar(id).subscribe({
         next: (response: any) => {
           if (response && response.success) {
-            this.notificationService.success('Destino excluído com sucesso!');
+            this.notificationService.success(this.i18n.t('common.sucesso_excluir'));
             this.carregarDestinos();
           } else {
-            this.notificationService.error(response?.message || 'Erro ao excluir');
+            this.notificationService.error(response?.message || this.i18n.t('common.erro'));
           }
         },
-        error: () => this.notificationService.error('Erro ao excluir destino')
+        error: () => this.notificationService.error(this.i18n.t('common.erro_excluir'))
       });
     }
   }

@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { ViagemService } from '../../../../core/services/viagem.service';
 import { DestinoService } from '../../../../core/services/destino.service';
 import { AuthService } from '../../../../core/services/auth.service';
+import { I18nService } from '../../../../core/services/i18n.service';
 
 interface Viagem {
   id: number;
@@ -27,15 +28,15 @@ interface Viagem {
   template: `
     <div class="container">
       <div class="page-header">
-        <h1>✈️ Minhas Viagens</h1>
-        <p>Gerencie seus planos de viagem</p>
+        <h1>✈️ {{ i18n.t('minhas_viagens.titulo') }}</h1>
+        <p>{{ i18n.t('minhas_viagens.subtitulo') }}</p>
       </div>
 
       <div *ngIf="carregado && viagens.length === 0" class="empty-state">
         <div class="empty-icon">🗺️</div>
-        <h3>Nenhuma viagem planejada</h3>
-        <p>Comece a planejar sua próxima aventura!</p>
-        <a routerLink="/planejar" class="btn-planejar">Planejar viagem</a>
+        <h3>{{ i18n.t('minhas_viagens.sem_viagens') }}</h3>
+        <p>{{ i18n.t('minhas_viagens.sem_viagens_texto') }}</p>
+        <a routerLink="/planejar" class="btn-planejar">{{ i18n.t('minhas_viagens.planejar') }}</a>
       </div>
 
       <div class="viagens-grid" *ngIf="viagens.length > 0">
@@ -55,12 +56,12 @@ interface Viagem {
             <div class="date">{{ viagem.data_inicio | date:'dd/MM/yyyy' }} - {{ viagem.data_fim | date:'dd/MM/yyyy' }}</div>
             <div class="info">
               <span>💰 {{ viagem.orcamento | number }} Kz</span>
-              <span *ngIf="viagem.valor_pago && viagem.valor_pago > 0">💳 Pago: {{ viagem.valor_pago | number }} Kz</span>
+              <span *ngIf="viagem.valor_pago && viagem.valor_pago > 0">💳 {{ i18n.t('minhas_viagens.pago') }}: {{ viagem.valor_pago | number }} Kz</span>
             </div>
             <div class="payment-info" *ngIf="viagem.forma_pagamento">
               <span class="payment-badge">{{ getFormaPagamentoTexto(viagem.forma_pagamento) }}</span>
             </div>
-            <button class="btn-detalhes" [routerLink]="['/viagem', viagem.id]">Ver detalhes →</button>
+            <button class="btn-detalhes" [routerLink]="['/viagem', viagem.id]">{{ i18n.t('minhas_viagens.ver_detalhes') }} →</button>
           </div>
         </div>
       </div>
@@ -202,7 +203,8 @@ export class MinhasViagens implements OnInit {
     private viagemService: ViagemService,
     private destinoService: DestinoService,
     private authService: AuthService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    public i18n: I18nService
   ) {}
 
   ngOnInit() {
@@ -211,20 +213,20 @@ export class MinhasViagens implements OnInit {
 
   getStatusTexto(status: string): string {
     const statusMap: any = {
-      'confirmada': '✅ Confirmada',
-      'planejando': '📝 Planejando',
-      'reservada': '📅 Reservada',
-      'aguardando_pagamento': '⏳ Aguardando pagamento'
+      'confirmada': '✅ ' + this.i18n.t('status.confirmada'),
+      'planejando': '📝 ' + this.i18n.t('status.planejando'),
+      'reservada': '📅 ' + this.i18n.t('status.reservada'),
+      'aguardando_pagamento': '⏳ ' + this.i18n.t('status.aguardando')
     };
     return statusMap[status] || status;
   }
 
   getFormaPagamentoTexto(forma: string): string {
     const formaMap: any = {
-      'pagar_agora': 'Pagamento à vista',
-      'sinal': 'Sinal (30%)',
-      'parcelar': 'Parcelado',
-      'reservar': 'Reserva'
+      'pagar_agora': this.i18n.t('pagamento.vista'),
+      'sinal': this.i18n.t('pagamento.sinal'),
+      'parcelar': this.i18n.t('pagamento.parcelado'),
+      'reservar': this.i18n.t('pagamento.reserva')
     };
     return formaMap[forma] || forma;
   }
@@ -236,16 +238,13 @@ export class MinhasViagens implements OnInit {
       return;
     }
 
-    // Buscar destinos primeiro
     this.destinoService.listar().subscribe({
       next: (responseDestinos: any) => {
         const destinos = responseDestinos.success ? responseDestinos.data : [];
         
-        // Buscar viagens do usuário
         this.viagemService.listarPorUsuario(usuario.id).subscribe({
           next: (responseViagens: any) => {
             if (responseViagens.success && responseViagens.data) {
-              // Mapear viagens com dados dos destinos
               this.viagens = responseViagens.data.map((viagem: any) => {
                 const destino = destinos.find((d: any) => d.id === viagem.destino_id);
                 return {
@@ -257,7 +256,7 @@ export class MinhasViagens implements OnInit {
               });
             }
             this.carregado = true;
-            this.cdr.detectChanges(); // Forçar atualização da view
+            this.cdr.detectChanges();
           },
           error: (err) => {
             console.error('Erro:', err);

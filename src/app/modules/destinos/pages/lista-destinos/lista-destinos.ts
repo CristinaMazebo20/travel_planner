@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { DestinoService, Destino } from '../../../../core/services/destino.service';
 import { NotificationService } from '../../../../core/services/notification.service';
+import { I18nService } from '../../../../core/services/i18n.service';
 
 @Component({
   selector: 'app-lista-destinos',
@@ -13,24 +14,25 @@ import { NotificationService } from '../../../../core/services/notification.serv
     <!-- Hero Section -->
     <div class="hero-section">
       <div class="hero-content">
-        <h1>Explore o mundo com <span>Travel<span>ly</span></span></h1>
-        <p>Encontre os melhores destinos e planeje sua viagem perfeita</p>
+        <h1>{{ i18n.t('destinos.hero_title') }} <span>Travel<span>ly</span></span></h1>
+        <p>{{ i18n.t('destinos.hero_subtitle') }}</p>
         
         <div class="search-card">
           <div class="search-grid">
-            <div class="search-item">
-              <label>🌍 Destino</label>
-              <input type="text" placeholder="Para onde você quer ir?" [(ngModel)]="filtroNome" (input)="filtrarDestinos()">
+            <div class="search-item search-item-full">
+              <label>🔍 {{ i18n.t('destinos.pesquisar') }}</label>
+              <div class="search-input-wrapper">
+                <input 
+                  type="text" 
+                  [placeholder]="i18n.t('destinos.destino_placeholder')" 
+                  [(ngModel)]="filtroNome" 
+                  (keyup.enter)="pesquisar()"
+                  class="search-input">
+                <button class="search-btn" (click)="pesquisar()">
+                  🔍 {{ i18n.t('destinos.pesquisar') }}
+                </button>
+              </div>
             </div>
-            <div class="search-item">
-              <label>📅 Data de ida</label>
-              <input type="date">
-            </div>
-            <div class="search-item">
-              <label>📅 Data de volta</label>
-              <input type="date">
-            </div>
-            <button class="search-btn" (click)="carregarDestinos()">🔍 Pesquisar</button>
           </div>
         </div>
       </div>
@@ -43,15 +45,22 @@ import { NotificationService } from '../../../../core/services/notification.serv
 
     <div class="container">
       <div class="section-header">
-        <h2>Destinos em destaque</h2>
-        <p>Os lugares mais desejados do momento</p>
+        <h2>{{ i18n.t('destinos.destaques') }}</h2>
+        <p>{{ i18n.t('destinos.destaques_sub') }}</p>
       </div>
 
-      <div *ngIf="carregando" class="loading">Carregando destinos...</div>
+      <!-- Resultados da busca -->
+      <div *ngIf="filtroNome && !carregando" class="search-result-info">
+        <p>🔍 {{ i18n.t('destinos.resultados_para') }}: <strong>"{{ filtroNome }}"</strong> 
+        ({{ destinosFiltrados.length }} {{ i18n.t('destinos.resultados_encontrados') }})</p>
+        <button class="btn-clear-filter" (click)="limparFiltro()">✖ {{ i18n.t('destinos.limpar_filtro') }}</button>
+      </div>
+
+      <div *ngIf="carregando" class="loading">{{ i18n.t('common.carregando') }}</div>
 
       <div *ngIf="!carregando && erro" class="error-message">
         <p>{{ erro }}</p>
-        <button class="btn-retry" (click)="carregarDestinos()">Tentar novamente</button>
+        <button class="btn-retry" (click)="carregarDestinos()">{{ i18n.t('common.tentar_novamente') }}</button>
       </div>
 
       <div class="destinos-grid" *ngIf="!carregando && !erro">
@@ -59,7 +68,7 @@ import { NotificationService } from '../../../../core/services/notification.serv
           <div class="card-image">
             <img [src]="destino.imagem" [alt]="destino.nome" (error)="destino.imagem = 'https://placehold.co/400x300?text=Destino'">
             <div class="card-overlay">
-              <span class="price">a partir de {{ destino.preco }} Kz</span>
+              <span class="price">{{ i18n.t('destinos.a_partir_de') }} {{ destino.preco | number }} Kz</span>
             </div>
           </div>
           <div class="card-content">
@@ -68,22 +77,26 @@ import { NotificationService } from '../../../../core/services/notification.serv
             <div class="rating">
               <span class="stars">★</span>
               <span>{{ destino.avaliacao || 4.5 }}</span>
-              <span class="reviews">Excelente</span>
+              <span class="reviews">{{ i18n.t('destinos.excelente') }}</span>
             </div>
-            <button class="btn-details" [routerLink]="['/destino', destino.id]">Ver detalhes →</button>
+            <button class="btn-details" [routerLink]="['/destino', destino.id]">{{ i18n.t('destinos.ver_detalhes') }} →</button>
           </div>
         </div>
       </div>
 
-      <div *ngIf="!carregando && !erro && destinosFiltrados.length === 0" class="empty-state">
-        Nenhum destino encontrado.
+      <div *ngIf="!carregando && !erro && destinosFiltrados.length === 0 && filtroNome" class="empty-state">
+        {{ i18n.t('destinos.nenhum_resultado') }}
+      </div>
+
+      <div *ngIf="!carregando && !erro && destinosFiltrados.length === 0 && !filtroNome" class="empty-state">
+        {{ i18n.t('destinos.nenhum_encontrado') }}
       </div>
     </div>
   `,
   styles: [`
     .hero-section {
       position: relative;
-      min-height: 70vh;
+      min-height: 60vh;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -124,53 +137,106 @@ import { NotificationService } from '../../../../core/services/notification.serv
     .search-card {
       background: rgba(255,255,255,0.05);
       backdrop-filter: blur(10px);
-      border-radius: 60px;
-      padding: 8px;
+      border-radius: 20px;
+      padding: 24px;
       border: 1px solid rgba(255,255,255,0.1);
     }
 
     .search-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr auto;
-      gap: 8px;
-      align-items: end;
+      display: flex;
+      justify-content: center;
     }
 
-    .search-item {
-      text-align: left;
-      padding: 8px 16px;
-    }
-
-    .search-item label {
-      display: block;
-      font-size: 0.75rem;
-      color: #A0A8C6;
-      margin-bottom: 4px;
-    }
-
-    .search-item input {
+    .search-item-full {
       width: 100%;
-      background: transparent;
-      border: none;
+      max-width: 600px;
+    }
+
+    .search-item-full label {
+      display: block;
+      font-size: 0.85rem;
+      color: #00D9FF;
+      margin-bottom: 8px;
+      text-align: left;
+    }
+
+    .search-input-wrapper {
+      display: flex;
+      gap: 12px;
+    }
+
+    .search-input {
+      flex: 1;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(0, 217, 255, 0.3);
+      border-radius: 12px;
+      padding: 14px 18px;
       color: white;
       font-size: 1rem;
-      padding: 8px 0;
+      transition: all 0.3s;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: #00D9FF;
+      box-shadow: 0 0 10px rgba(0, 217, 255, 0.2);
+    }
+
+    .search-input::placeholder {
+      color: #6B7280;
     }
 
     .search-btn {
       background: linear-gradient(135deg, #6C3BD4, #00D9FF);
       border: none;
       color: white;
-      padding: 16px 32px;
-      border-radius: 50px;
+      padding: 14px 32px;
+      border-radius: 12px;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.3s;
     }
 
     .search-btn:hover {
-      transform: scale(1.02);
+      transform: translateY(-2px);
       box-shadow: 0 4px 20px rgba(108,59,212,0.4);
+    }
+
+    .search-result-info {
+      background: rgba(0, 217, 255, 0.1);
+      border: 1px solid rgba(0, 217, 255, 0.2);
+      border-radius: 12px;
+      padding: 12px 20px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .search-result-info p {
+      color: #A0A8C6;
+      margin: 0;
+    }
+
+    .search-result-info strong {
+      color: #00D9FF;
+    }
+
+    .btn-clear-filter {
+      background: rgba(239, 68, 68, 0.2);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 8px;
+      padding: 6px 14px;
+      color: #EF4444;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 0.85rem;
+    }
+
+    .btn-clear-filter:hover {
+      background: rgba(239, 68, 68, 0.3);
     }
 
     .hero-bg {
@@ -355,17 +421,18 @@ import { NotificationService } from '../../../../core/services/notification.serv
       .hero-content h1 {
         font-size: 2rem;
       }
-      .search-grid {
-        grid-template-columns: 1fr;
-      }
-      .search-card {
-        border-radius: 20px;
+      .search-input-wrapper {
+        flex-direction: column;
       }
       .search-btn {
         width: 100%;
       }
       .destinos-grid {
         grid-template-columns: 1fr;
+      }
+      .search-result-info {
+        flex-direction: column;
+        text-align: center;
       }
     }
   `]
@@ -379,7 +446,8 @@ export class ListaDestinos implements OnInit {
 
   constructor(
     private destinoService: DestinoService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    public i18n: I18nService
   ) {}
 
   ngOnInit(): void {
@@ -396,29 +464,40 @@ export class ListaDestinos implements OnInit {
         if (response.success && response.data) {
           this.destinos = response.data;
           this.destinosFiltrados = [...this.destinos];
+          console.log('Destinos carregados:', this.destinos.length);
         } else {
-          this.erro = 'Erro ao carregar destinos.';
-          this.notificationService.error('Erro ao carregar destinos');
+          this.erro = this.i18n.t('destinos.erro_carregar');
+          this.notificationService.error(this.i18n.t('destinos.erro_carregar'));
         }
       },
       error: (err) => {
         this.carregando = false;
-        this.erro = 'Erro de conexão com o servidor.';
-        this.notificationService.error('Erro de conexão');
+        this.erro = this.i18n.t('destinos.erro_conexao');
+        this.notificationService.error(this.i18n.t('destinos.erro_conexao'));
         console.error('Erro:', err);
       }
     });
   }
 
-  filtrarDestinos() {
-    if (!this.filtroNome) {
+  pesquisar() {
+    console.log('Pesquisando com termo:', this.filtroNome);
+    
+    if (!this.filtroNome || this.filtroNome.trim() === '') {
       this.destinosFiltrados = [...this.destinos];
     } else {
-      this.destinosFiltrados = this.destinos.filter(d => 
-        d.nome.toLowerCase().includes(this.filtroNome.toLowerCase()) ||
-        d.cidade.toLowerCase().includes(this.filtroNome.toLowerCase()) ||
-        d.pais.toLowerCase().includes(this.filtroNome.toLowerCase())
-      );
+      const termo = this.filtroNome.toLowerCase().trim();
+      this.destinosFiltrados = this.destinos.filter(destino => {
+        return destino.nome.toLowerCase().includes(termo) ||
+               destino.cidade.toLowerCase().includes(termo) ||
+               destino.pais.toLowerCase().includes(termo);
+      });
     }
+    
+    console.log('Resultados encontrados:', this.destinosFiltrados.length);
+  }
+
+  limparFiltro() {
+    this.filtroNome = '';
+    this.destinosFiltrados = [...this.destinos];
   }
 }

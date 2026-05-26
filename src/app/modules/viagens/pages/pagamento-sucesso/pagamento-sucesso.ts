@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute } from '@angular/router';
+import { I18nService } from '../../../../core/services/i18n.service';
 
 @Component({
   selector: 'app-pagamento-sucesso',
@@ -10,21 +11,21 @@ import { RouterModule, ActivatedRoute } from '@angular/router';
     <div class="success-container">
       <div class="success-card">
         <div class="success-icon">✅</div>
-        <h1>Pagamento Confirmado!</h1>
-        <p>Sua viagem foi confirmada com sucesso.</p>
+        <h1>{{ i18n.t('pagamento_sucesso.titulo') }}</h1>
+        <p>{{ i18n.t('pagamento_sucesso.subtitulo') }}</p>
         
         <div class="info-box">
-          <h3>📋 Detalhes da Viagem</h3>
-          <p><strong>Destino:</strong> {{ destino }}</p>
-          <p><strong>Data de início:</strong> {{ dataInicio | date:'dd/MM/yyyy' }}</p>
-          <p><strong>Data de fim:</strong> {{ dataFim | date:'dd/MM/yyyy' }}</p>
-          <p><strong>Forma de pagamento:</strong> {{ formaPagamento }}</p>
-          <p><strong>Valor pago:</strong> {{ valorPago | number }} Kz</p>
+          <h3>📋 {{ i18n.t('pagamento_sucesso.detalhes') }}</h3>
+          <p><strong>{{ i18n.t('pagamento_sucesso.destino') }}:</strong> {{ destino }}</p>
+          <p><strong>{{ i18n.t('pagamento_sucesso.data_inicio') }}:</strong> {{ dataInicio | date:'dd/MM/yyyy' }}</p>
+          <p><strong>{{ i18n.t('pagamento_sucesso.data_fim') }}:</strong> {{ dataFim | date:'dd/MM/yyyy' }}</p>
+          <p><strong>{{ i18n.t('pagamento_sucesso.forma_pagamento') }}:</strong> {{ formaPagamento }}</p>
+          <p><strong>{{ i18n.t('pagamento_sucesso.valor_pago') }}:</strong> {{ valorPago | number }} Kz</p>
         </div>
 
         <div class="button-group">
-          <a routerLink="/minhas-viagens" class="btn-primary">Ver minhas viagens</a>
-          <a routerLink="/destinos" class="btn-secondary">Explorar mais destinos</a>
+          <a routerLink="/minhas-viagens" class="btn-primary">{{ i18n.t('pagamento_sucesso.ver_viagens') }}</a>
+          <a routerLink="/destinos" class="btn-secondary">{{ i18n.t('pagamento_sucesso.explorar') }}</a>
         </div>
       </div>
     </div>
@@ -67,7 +68,10 @@ export class PagamentoSucesso implements OnInit {
   formaPagamento = '';
   valorPago = 0;
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(
+    private route: ActivatedRoute,
+    public i18n: I18nService
+  ) {}
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {

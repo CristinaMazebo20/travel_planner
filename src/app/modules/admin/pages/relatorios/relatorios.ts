@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { DestinoService } from '../../../../core/services/destino.service';
 import { UsuarioService } from '../../../../core/services/usuario.service';
 import { ViagemService } from '../../../../core/services/viagem.service';
+import { I18nService } from '../../../../core/services/i18n.service';
+import { ThemeService } from '../../../../core/services/theme.service';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
@@ -16,18 +18,20 @@ import { saveAs } from 'file-saver';
     <div class="relatorios-page">
       <div class="page-header">
         <div class="header-left">
-          <button class="btn-back" (click)="voltar()">← Voltar</button>
-          <h1>📊 Relatórios e Estatísticas</h1>
+          <button class="btn-back" (click)="voltar()">← {{ i18n.t('common.voltar') }}</button>
+          <h1>📊 {{ i18n.t('relatorios.titulo') }}</h1>
         </div>
-        <div class="export-buttons">
-          <button class="btn-export-excel" (click)="exportarExcel()">📊 Exportar Excel</button>
-          <button class="btn-print" (click)="imprimir()">🖨️ Imprimir</button>
+        <div class="header-right">
+          <div class="export-buttons">
+            <button class="btn-export-excel" (click)="exportarExcel()">📊 {{ i18n.t('relatorios.exportar_excel') }}</button>
+            <button class="btn-print" (click)="imprimir()">🖨️ {{ i18n.t('relatorios.imprimir') }}</button>
+          </div>
         </div>
       </div>
 
       <div *ngIf="carregando" class="loading">
         <div class="spinner"></div>
-        <p>Carregando estatísticas...</p>
+        <p>{{ i18n.t('common.carregando') }}</p>
       </div>
 
       <div *ngIf="!carregando">
@@ -36,64 +40,64 @@ import { saveAs } from 'file-saver';
             <div class="stat-icon">🌍</div>
             <div class="stat-info">
               <h3>{{ totalDestinos }}</h3>
-              <p>Destinos</p>
+              <p>{{ i18n.t('relatorios.destinos') }}</p>
             </div>
           </div>
           <div class="stat-card">
             <div class="stat-icon">👥</div>
             <div class="stat-info">
               <h3>{{ totalUsuarios }}</h3>
-              <p>Usuários</p>
-              <small>{{ usuariosAdmin }} Admin | {{ usuariosCliente }} Clientes</small>
+              <p>{{ i18n.t('relatorios.usuarios') }}</p>
+              <small>{{ usuariosAdmin }} Admin | {{ usuariosCliente }} {{ i18n.t('relatorios.clientes') }}</small>
             </div>
           </div>
           <div class="stat-card">
             <div class="stat-icon">✈️</div>
             <div class="stat-info">
               <h3>{{ totalViagens }}</h3>
-              <p>Viagens</p>
-              <small>{{ viagensConfirmadas }} Confirmadas | {{ viagensPlanejadas }} Planejadas</small>
+              <p>{{ i18n.t('relatorios.viagens') }}</p>
+              <small>{{ viagensConfirmadas }} {{ i18n.t('relatorios.confirmadas') }} | {{ viagensPlanejadas }} {{ i18n.t('relatorios.planejadas') }}</small>
             </div>
           </div>
           <div class="stat-card">
             <div class="stat-icon">💰</div>
             <div class="stat-info">
               <h3>{{ totalFaturado | number }} Kz</h3>
-              <p>Faturamento</p>
-              <small>Média: {{ ticketMedio | number }} Kz</small>
+              <p>{{ i18n.t('relatorios.faturamento') }}</p>
+              <small>{{ i18n.t('relatorios.media') }}: {{ ticketMedio | number }} Kz</small>
             </div>
           </div>
         </div>
 
         <!-- Status das Viagens -->
         <div class="chart-card">
-          <h3>📊 Status das Viagens</h3>
+          <h3>📊 {{ i18n.t('relatorios.status_viagens') }}</h3>
           <div class="status-stats">
             <div class="status-item">
               <div class="status-color status-confirmada"></div>
               <div class="status-info">
-                <span class="status-name">Confirmadas</span>
+                <span class="status-name">{{ i18n.t('status.confirmada') }}</span>
                 <span class="status-value">{{ viagensConfirmadaPorcentagem }}%</span>
               </div>
             </div>
             <div class="status-item">
               <div class="status-color status-planejando"></div>
               <div class="status-info">
-                <span class="status-name">Planejando</span>
+                <span class="status-name">{{ i18n.t('status.planejando') }}</span>
                 <span class="status-value">{{ viagensPlanejandoPorcentagem }}%</span>
               </div>
             </div>
             <div class="status-item">
               <div class="status-color status-reservada"></div>
               <div class="status-info">
-                <span class="status-name">Reservadas</span>
+                <span class="status-name">{{ i18n.t('status.reservada') }}</span>
                 <span class="status-value">{{ viagensReservadaPorcentagem }}%</span>
               </div>
             </div>
             <div class="status-item">
               <div class="status-color status-aguardando"></div>
               <div class="status-info">
-                <span class="status-name">Aguardando Pagamento</span>
+                <span class="status-name">{{ i18n.t('status.aguardando') }}</span>
                 <span class="status-value">{{ viagensAguardandoPorcentagem }}%</span>
               </div>
             </div>
@@ -101,7 +105,7 @@ import { saveAs } from 'file-saver';
         </div>
 
         <div class="chart-card">
-          <h3>🌟 Destinos Mais Populares</h3>
+          <h3>🌟 {{ i18n.t('relatorios.destinos_populares') }}</h3>
           <div class="ranking-list">
             <div *ngFor="let destino of destinosPopulares; let i = index" class="ranking-item">
               <div class="ranking-position">{{ i + 1 }}º</div>
@@ -109,21 +113,21 @@ import { saveAs } from 'file-saver';
                 <span class="ranking-name">{{ destino.nome }}</span>
                 <span class="ranking-pais">{{ destino.pais }}</span>
               </div>
-              <div class="ranking-value">{{ destino.total_viagens }} viagens</div>
+              <div class="ranking-value">{{ destino.total_viagens }} {{ i18n.t('relatorios.viagens') }}</div>
             </div>
           </div>
         </div>
 
         <div class="chart-card">
-          <h3>📋 Últimas Viagens</h3>
+          <h3>📋 {{ i18n.t('relatorios.ultimas_viagens') }}</h3>
           <table class="data-table">
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Destino</th>
-                <th>Data</th>
-                <th>Status</th>
-                <th>Valor</th>
+                <th>{{ i18n.t('gestao_viagens.destino') }}</th>
+                <th>{{ i18n.t('gestao_viagens.data') }}</th>
+                <th>{{ i18n.t('gestao_viagens.status') }}</th>
+                <th>{{ i18n.t('gestao_viagens.valor') }}</th>
               </tr>
             </thead>
             <tbody>
@@ -144,9 +148,26 @@ import { saveAs } from 'file-saver';
     .relatorios-page { padding: 24px; }
     .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; flex-wrap: wrap; gap: 16px; }
     .header-left { display: flex; align-items: center; gap: 16px; }
+    .header-right { display: flex; align-items: center; gap: 12px; }
     .btn-back { background: rgba(0,217,255,0.1); border: 1px solid rgba(0,217,255,0.3); padding: 8px 16px; border-radius: 8px; color: #00D9FF; cursor: pointer; }
     .btn-back:hover { background: rgba(0,217,255,0.2); transform: translateX(-2px); }
     .page-header h1 { color: white; margin: 0; font-size: 1.8rem; }
+    
+    /* Language Selector */
+    .lang-selector { position: relative; }
+    .lang-btn { display: flex; align-items: center; gap: 6px; background: rgba(0,217,255,0.1); border: 1px solid rgba(0,217,255,0.3); border-radius: 8px; padding: 8px 12px; color: #00D9FF; cursor: pointer; font-size: 0.85rem; transition: all 0.2s; }
+    .lang-btn:hover { background: rgba(0,217,255,0.2); }
+    .lang-icon { transition: transform 0.2s; }
+    .lang-selector:hover .lang-icon { transform: rotate(180deg); }
+    .lang-dropdown { position: absolute; top: 100%; right: 0; margin-top: 8px; background: var(--bg-card-solid, #11123D); border: 1px solid rgba(0,217,255,0.2); border-radius: 12px; overflow: hidden; min-width: 140px; z-index: 100; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); }
+    .lang-item { display: block; width: 100%; padding: 10px 16px; background: transparent; border: none; color: var(--text-secondary, #A0A8C6); font-size: 0.85rem; cursor: pointer; text-align: left; transition: all 0.2s; }
+    .lang-item:hover { background: rgba(0,217,255,0.1); color: #00D9FF; }
+    .lang-item.active { background: linear-gradient(135deg, #6C3BD4, #00D9FF); color: white; }
+    
+    /* Theme Button */
+    .theme-btn { background: rgba(0,217,255,0.1); border: 1px solid rgba(0,217,255,0.3); border-radius: 8px; width: 36px; height: 36px; cursor: pointer; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+    .theme-btn:hover { background: rgba(0,217,255,0.2); transform: scale(1.05); }
+    
     .export-buttons { display: flex; gap: 12px; }
     .btn-export-excel, .btn-print { padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: 500; }
     .btn-export-excel { background: #10B981; color: white; }
@@ -182,6 +203,12 @@ import { saveAs } from 'file-saver';
     .loading { text-align: center; padding: 60px; color: #A0A8C6; }
     .spinner { width: 50px; height: 50px; border: 3px solid rgba(0,217,255,0.1); border-top-color: #00D9FF; border-radius: 50%; margin: 0 auto 20px; animation: spin 1s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
+    
+    @media (max-width: 768px) {
+      .page-header { flex-direction: column; align-items: flex-start; }
+      .header-right { width: 100%; justify-content: flex-end; flex-wrap: wrap; }
+      .export-buttons { width: 100%; justify-content: flex-end; }
+    }
   `]
 })
 export class Relatorios implements OnInit {
@@ -199,6 +226,7 @@ export class Relatorios implements OnInit {
   ticketMedio: number = 0;
   destinosPopulares: any[] = [];
   ultimasViagens: any[] = [];
+  langMenuOpen = false;
   
   viagensConfirmadaPorcentagem: number = 0;
   viagensPlanejandoPorcentagem: number = 0;
@@ -210,8 +238,16 @@ export class Relatorios implements OnInit {
     private usuarioService: UsuarioService,
     private viagemService: ViagemService,
     private router: Router,
-    private cdr: ChangeDetectorRef
-  ) {}
+    private cdr: ChangeDetectorRef,
+    public i18n: I18nService,
+    public themeService: ThemeService
+  ) {
+    document.addEventListener('click', (event) => {
+      if (!(event.target as Element).closest('.lang-selector')) {
+        this.langMenuOpen = false;
+      }
+    });
+  }
 
   ngOnInit() {
     this.carregarDados();
@@ -221,11 +257,30 @@ export class Relatorios implements OnInit {
     this.router.navigate(['/admin/dashboard']);
   }
 
+  getCurrentLangLabel(): string {
+    const labels = { pt: 'PT', en: 'EN', fr: 'FR' };
+    return labels[this.i18n.getCurrentLang()];
+  }
+
+  toggleLangMenu() {
+    this.langMenuOpen = !this.langMenuOpen;
+  }
+
+  setLanguage(lang: 'pt' | 'en' | 'fr') {
+    this.i18n.setLanguage(lang);
+    this.langMenuOpen = false;
+  }
+
+  toggleTheme() {
+    this.themeService.toggleTheme();
+  }
+
   getStatusTexto(status: string): string {
-    if (status === 'confirmada') return 'Confirmada';
-    if (status === 'planejando') return 'Planejando';
-    if (status === 'reservada') return 'Reservada';
-    if (status === 'aguardando_pagamento') return 'Aguardando';
+    const s = status?.toLowerCase() || '';
+    if (s === 'confirmada' || s === 'confirmado') return this.i18n.t('status.confirmada');
+    if (s === 'planejando' || s === 'planejada') return this.i18n.t('status.planejando');
+    if (s === 'reservada' || s === 'reservado') return this.i18n.t('status.reservada');
+    if (s === 'aguardando_pagamento' || s === 'aguardando') return this.i18n.t('status.aguardando');
     return status;
   }
 
@@ -330,10 +385,10 @@ export class Relatorios implements OnInit {
       [''],
       ['STATUS DAS VIAGENS'],
       ['Status', 'Quantidade', 'Percentual'],
-      ['Confirmadas', this.viagensConfirmadas, this.viagensConfirmadaPorcentagem + '%'],
-      ['Planejando', this.viagensPlanejadas, this.viagensPlanejandoPorcentagem + '%'],
-      ['Reservadas', this.viagensReservadas, this.viagensReservadaPorcentagem + '%'],
-      ['Aguardando Pagamento', this.viagensAguardando, this.viagensAguardandoPorcentagem + '%'],
+      [this.i18n.t('status.confirmada'), this.viagensConfirmadas, this.viagensConfirmadaPorcentagem + '%'],
+      [this.i18n.t('status.planejando'), this.viagensPlanejadas, this.viagensPlanejandoPorcentagem + '%'],
+      [this.i18n.t('status.reservada'), this.viagensReservadas, this.viagensReservadaPorcentagem + '%'],
+      [this.i18n.t('status.aguardando'), this.viagensAguardando, this.viagensAguardandoPorcentagem + '%'],
       [''],
       ['DESTINOS MAIS POPULARES'],
       ['Posição', 'Destino', 'País', 'Total de Viagens']

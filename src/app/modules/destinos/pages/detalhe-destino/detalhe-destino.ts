@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { DestinoService, Destino } from '../../../../core/services/destino.service';
 import { NotificationService } from '../../../../core/services/notification.service';
+import { I18nService } from '../../../../core/services/i18n.service';
 
 @Component({
   selector: 'app-detalhe-destino',
@@ -12,7 +13,7 @@ import { NotificationService } from '../../../../core/services/notification.serv
     <div class="container" *ngIf="destino">
       <!-- Botão voltar -->
       <div class="back-button">
-        <a routerLink="/destinos" class="btn-back">← Voltar para destinos</a>
+        <a routerLink="/destinos" class="btn-back">← {{ i18n.t('detalhe_destino.voltar') }}</a>
       </div>
 
       <!-- Imagem principal -->
@@ -30,12 +31,12 @@ import { NotificationService } from '../../../../core/services/notification.serv
       <div class="content-grid">
         <div class="main-content">
           <div class="info-card">
-            <h2>📝 Sobre o destino</h2>
+            <h2>📝 {{ i18n.t('detalhe_destino.sobre') }}</h2>
             <p>{{ destino.descricao }}</p>
           </div>
 
           <div class="info-card">
-            <h2>✨ Atrações principais</h2>
+            <h2>✨ {{ i18n.t('detalhe_destino.atracoes') }}</h2>
             <div class="atracoes-grid">
               <div *ngFor="let atracao of destino.atracoes" class="atracao-item">
                 {{ atracao }}
@@ -44,21 +45,21 @@ import { NotificationService } from '../../../../core/services/notification.serv
           </div>
 
           <div class="info-card">
-            <h2>📅 Melhor época para visitar</h2>
-            <p>{{ destino.melhorEpoca || 'Durante todo o ano' }}</p>
+            <h2>📅 {{ i18n.t('detalhe_destino.melhor_epoca') }}</h2>
+            <p>{{ getMelhorEpocaTraduzida() }}</p>
           </div>
         </div>
 
         <div class="sidebar">
           <div class="price-card">
-            <h3>💰 Preço médio</h3>
+            <h3>💰 {{ i18n.t('detalhe_destino.preco_medio') }}</h3>
             <div class="price">{{ destino.preco | number }} Kz</div>
-            <p>por pessoa (ida e volta)</p>
-            <button class="btn-planejar" routerLink="/planejar">✈️ Planejar viagem</button>
+            <p>{{ i18n.t('detalhe_destino.preco_descricao') }}</p>
+            <button class="btn-planejar" routerLink="/planejar">✈️ {{ i18n.t('detalhe_destino.planejar') }}</button>
           </div>
 
           <div class="info-card">
-            <h3>⭐ Avaliação</h3>
+            <h3>⭐ {{ i18n.t('detalhe_destino.avaliacao') }}</h3>
             <div class="rating">{{ destino.avaliacao }} / 5.0</div>
             <div class="stars">★★★★★</div>
           </div>
@@ -67,11 +68,11 @@ import { NotificationService } from '../../../../core/services/notification.serv
     </div>
 
     <div *ngIf="!destino && !carregando" class="error-container">
-      <h2>Destino não encontrado</h2>
-      <a routerLink="/destinos" class="btn-back">Voltar para destinos</a>
+      <h2>{{ i18n.t('detalhe_destino.nao_encontrado') }}</h2>
+      <a routerLink="/destinos" class="btn-back">{{ i18n.t('detalhe_destino.voltar') }}</a>
     </div>
 
-    <div *ngIf="carregando" class="loading">Carregando...</div>
+    <div *ngIf="carregando" class="loading">{{ i18n.t('common.carregando') }}</div>
   `,
   styles: [`
     .container {
@@ -237,10 +238,37 @@ export class DetalheDestino implements OnInit {
   destino: Destino | null = null;
   carregando = true;
 
+  // Mapeamento para tradução de meses
+  private meses: { [key: string]: string } = {
+    'janeiro': 'meses.janeiro',
+    'fevereiro': 'meses.fevereiro',
+    'março': 'meses.marco',
+    'abril': 'meses.abril',
+    'maio': 'meses.maio',
+    'junho': 'meses.junho',
+    'julho': 'meses.julho',
+    'agosto': 'meses.agosto',
+    'setembro': 'meses.setembro',
+    'outubro': 'meses.outubro',
+    'novembro': 'meses.novembro',
+    'dezembro': 'meses.dezembro'
+  };
+
+  // Mapeamento para tradução de estações
+  private estacoes: { [key: string]: string } = {
+    'primavera': 'estacoes.primavera',
+    'verão': 'estacoes.verao',
+    'verao': 'estacoes.verao',
+    'outono': 'estacoes.outono',
+    'inverno': 'estacoes.inverno'
+  };
+
   constructor(
     private route: ActivatedRoute,
     private destinoService: DestinoService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    public i18n: I18nService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -249,17 +277,40 @@ export class DetalheDestino implements OnInit {
       this.carregarDestino(parseInt(id));
     } else {
       this.carregando = false;
-      this.notificationService.error('Destino não identificado');
+      this.notificationService.error(this.i18n.t('detalhe_destino.erro_identificar'));
+      this.cdr.detectChanges();
     }
+  }
+
+  getMelhorEpocaTraduzida(): string {
+    if (!this.destino?.melhorEpoca || this.destino.melhorEpoca.trim() === '') {
+      return this.i18n.t('detalhe_destino.melhor_epoca_padrao');
+    }
+    
+    let texto = this.destino.melhorEpoca.toLowerCase();
+    
+    // Traduzir meses
+    for (const [original, chave] of Object.entries(this.meses)) {
+      texto = texto.replace(new RegExp(original, 'gi'), this.i18n.t(chave));
+    }
+    
+    // Traduzir estações
+    for (const [original, chave] of Object.entries(this.estacoes)) {
+      texto = texto.replace(new RegExp(original, 'gi'), this.i18n.t(chave));
+    }
+    
+    // Capitalizar primeira letra
+    return texto.charAt(0).toUpperCase() + texto.slice(1);
   }
 
   carregarDestino(id: number) {
     this.carregando = true;
+    this.cdr.detectChanges();
+    
     this.destinoService.buscar(id).subscribe({
       next: (response: any) => {
         this.carregando = false;
         if (response.success && response.data) {
-          // Garantir que atracoes seja um array
           const data = response.data;
           if (typeof data.atracoes === 'string') {
             data.atracoes = data.atracoes.split(',');
@@ -269,13 +320,15 @@ export class DetalheDestino implements OnInit {
           }
           this.destino = data;
         } else {
-          this.notificationService.error('Destino não encontrado');
+          this.notificationService.error(this.i18n.t('detalhe_destino.erro_encontrar'));
         }
+        this.cdr.detectChanges();
       },
       error: (err) => {
         this.carregando = false;
         console.error('Erro:', err);
-        this.notificationService.error('Erro de conexão');
+        this.notificationService.error(this.i18n.t('detalhe_destino.erro_conexao'));
+        this.cdr.detectChanges();
       }
     });
   }
