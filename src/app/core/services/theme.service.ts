@@ -1,33 +1,38 @@
-import { Injectable, signal, effect } from '@angular/core';
+// core/services/theme.service.ts
+import { Injectable, signal } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ThemeService {
-  private isDarkSignal = signal<boolean>(false);
+  private isDarkSignal = signal<boolean>(true);
   public isDark = this.isDarkSignal.asReadonly();
 
   constructor() {
-    const saved = localStorage.getItem('theme');
-    const isDark = saved === 'dark';
-    this.isDarkSignal.set(isDark);
-    this.aplicarTema();
-
-    effect(() => {
-      this.aplicarTema();
-      localStorage.setItem('theme', this.isDarkSignal() ? 'dark' : 'light');
-    });
-  }
-
-  toggle(): void {
-    this.isDarkSignal.update(v => !v);
-  }
-
-  private aplicarTema(): void {
-    if (this.isDarkSignal()) {
-      document.body.classList.add('dark');
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      this.isDarkSignal.set(savedTheme === 'dark');
     } else {
-      document.body.classList.remove('dark');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      this.isDarkSignal.set(prefersDark);
+    }
+    this.applyTheme();
+  }
+
+  toggleTheme() {
+    this.isDarkSignal.update(value => !value);
+    this.applyTheme();
+    localStorage.setItem('theme', this.isDarkSignal() ? 'dark' : 'light');
+  }
+
+  private applyTheme() {
+    const body = document.body;
+    if (this.isDarkSignal()) {
+      body.classList.add('dark-theme');
+      body.classList.remove('light-theme');
+    } else {
+      body.classList.add('light-theme');
+      body.classList.remove('dark-theme');
     }
   }
 }

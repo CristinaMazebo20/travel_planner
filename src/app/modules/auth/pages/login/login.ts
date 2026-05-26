@@ -1,9 +1,11 @@
+// modules/auth/pages/login/login.ts
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth.service';
 import { NotificationService } from '../../../../core/services/notification.service';
+import { I18nService } from '../../../../core/services/i18n.service';
 
 @Component({
   selector: 'app-login',
@@ -27,29 +29,29 @@ import { NotificationService } from '../../../../core/services/notification.serv
           <h2>Travel<span>ly</span></h2>
         </div>
 
-        <h3>Bem-vindo de volta</h3>
-        <p>Entre para continuar sua jornada</p>
+        <h3>{{ i18n.t('login.titulo') }}</h3>
+        <p>{{ i18n.t('login.subtitulo') }}</p>
 
         <form (ngSubmit)="onSubmit()">
           <div class="input-group">
             <input type="email" [(ngModel)]="email" name="email" required>
-            <label>Email</label>
+            <label>{{ i18n.t('login.email') }}</label>
           </div>
 
           <div class="input-group">
             <input type="password" [(ngModel)]="senha" name="senha" required>
-            <label>Senha</label>
+            <label>{{ i18n.t('login.senha') }}</label>
           </div>
 
           <div *ngIf="erro" class="error">{{ erro }}</div>
 
           <button type="submit" [disabled]="carregando" class="btn-login">
-            {{ carregando ? 'Entrando...' : 'Entrar' }}
+            {{ carregando ? i18n.t('login.carregando') : i18n.t('login.entrar') }}
           </button>
 
           <div class="links">
-            <a routerLink="/registar">Criar nova conta</a>
-            <a routerLink="/recuperar-senha">Esqueceu a senha?</a>
+            <a routerLink="/registar">{{ i18n.t('login.criar_conta') }}</a>
+            <a routerLink="/recuperar-senha">{{ i18n.t('login.esqueceu_senha') }}</a>
           </div>
         </form>
       </div>
@@ -100,12 +102,13 @@ export class Login {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    public i18n: I18nService
   ) {}
 
   onSubmit() {
     if (!this.email || !this.senha) {
-      this.erro = 'Preencha todos os campos';
+      this.erro = this.i18n.t('login.erro_campos');
       return;
     }
 
@@ -116,15 +119,15 @@ export class Login {
       next: (response: any) => {
         this.carregando = false;
         if (response.success) {
-          this.notificationService.success('Login realizado com sucesso!');
+          this.notificationService.success(this.i18n.t('login.sucesso'));
           this.router.navigate(['/destinos']);
         } else {
-          this.erro = response.message || 'Email ou senha inválidos';
+          this.erro = response.message || this.i18n.t('login.erro_credenciais');
         }
       },
       error: () => {
         this.carregando = false;
-        this.erro = 'Erro de conexão';
+        this.erro = this.i18n.t('login.erro_conexao');
       }
     });
   }

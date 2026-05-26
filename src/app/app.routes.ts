@@ -27,10 +27,12 @@ export const routes: Routes = [
     canActivate: [AdminGuard],
     loadComponent: () => import('./modules/admin/admin-layout/admin-layout').then(m => m.AdminLayout),
     children: [
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', loadComponent: () => import('./modules/admin/pages/dashboard/dashboard').then(m => m.AdminDashboard) },
       { path: 'destinos', loadComponent: () => import('./modules/admin/pages/gestao-destinos/gestao-destinos').then(m => m.GestaoDestinos) },
-      { path: 'usuarios', loadComponent: () => import('./modules/admin/pages/gestao-usuarios/gestao-usuarios').then(m => m.GestaoUsuarios) }
+      { path: 'usuarios', loadComponent: () => import('./modules/admin/pages/gestao-usuarios/gestao-usuarios').then(m => m.GestaoUsuarios) },
+      { path: 'relatorios', loadComponent: () => import('./modules/admin/pages/relatorios/relatorios').then(m => m.Relatorios) },
+       { path: 'viagens', loadComponent: () => import('./modules/admin/pages/gestao-viagens/gestao-viagens').then(m => m.GestaoViagens) }
     ]
   },
 

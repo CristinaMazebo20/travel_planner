@@ -31,7 +31,7 @@ interface Viagem {
         <p>Gerencie seus planos de viagem</p>
       </div>
 
-      <div *ngIf="!carregado && viagens.length === 0" class="empty-state">
+      <div *ngIf="carregado && viagens.length === 0" class="empty-state">
         <div class="empty-icon">🗺️</div>
         <h3>Nenhuma viagem planejada</h3>
         <p>Comece a planejar sua próxima aventura!</p>

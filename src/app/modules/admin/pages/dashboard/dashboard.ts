@@ -1,6 +1,7 @@
+// modules/admin/pages/dashboard/dashboard.ts
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -10,6 +11,9 @@ import { RouterModule } from '@angular/router';
     <div class="admin-dashboard">
       <div class="container">
         <div class="header">
+          <div class="header-top">
+            <button class="btn-back" (click)="voltar()">← Voltar ao Site</button>
+          </div>
           <h1>👑 Painel Administrativo</h1>
           <p>Gerencie destinos, usuários e viagens</p>
         </div>
@@ -28,14 +32,12 @@ import { RouterModule } from '@angular/router';
             <p>Gerenciar usuários do sistema</p>
             <span class="arrow">→</span>
           </div>
-
-          <div class="admin-card" routerLink="/admin/viagens">
+<div class="admin-card" routerLink="/admin/viagens">
             <div class="card-icon">✈️</div>
             <h3>Viagens</h3>
-            <p>Visualizar todas as viagens</p>
+            <p>Visualizar todas as viagens e pagamentos</p>
             <span class="arrow">→</span>
           </div>
-
           <div class="admin-card" routerLink="/admin/relatorios">
             <div class="card-icon">📊</div>
             <h3>Relatórios</h3>
@@ -60,6 +62,28 @@ import { RouterModule } from '@angular/router';
     .header {
       text-align: center;
       margin-bottom: 48px;
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: flex-start;
+      margin-bottom: 20px;
+    }
+
+    .btn-back {
+      background: rgba(0, 217, 255, 0.1);
+      border: 1px solid rgba(0, 217, 255, 0.3);
+      padding: 8px 16px;
+      border-radius: 8px;
+      color: #00D9FF;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 0.9rem;
+    }
+
+    .btn-back:hover {
+      background: rgba(0, 217, 255, 0.2);
+      transform: translateX(-2px);
     }
 
     .header h1 {
@@ -87,7 +111,7 @@ import { RouterModule } from '@angular/router';
       text-align: center;
       cursor: pointer;
       transition: all 0.3s;
-      border: 1px solid rgba(0,217,255,0.1);
+      border: 1px solid rgba(0, 217, 255, 0.1);
     }
 
     .admin-card:hover {
@@ -118,7 +142,7 @@ import { RouterModule } from '@angular/router';
       color: #00D9FF;
       font-size: 1.2rem;
       opacity: 0;
-      transition: opacity 0.3s;
+      transition: all 0.3s;
     }
 
     .admin-card:hover .arrow {
@@ -127,4 +151,10 @@ import { RouterModule } from '@angular/router';
     }
   `]
 })
-export class AdminDashboard {}
+export class AdminDashboard {
+  constructor(private router: Router) {}
+
+  voltar() {
+    this.router.navigate(['/destinos']);
+  }
+}

@@ -1,6 +1,8 @@
+// shared/components/footer/footer.ts
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { I18nService } from '../../../core/services/i18n.service';
 
 @Component({
   selector: 'app-footer',
@@ -27,7 +29,7 @@ import { RouterModule } from '@angular/router';
               </svg>
               <span>Travel<span>ly</span></span>
             </div>
-            <p>Descubra o mundo com estilo e conforto. Planeje suas viagens de forma inteligente.</p>
+            <p>{{ i18n.t('footer.descricao') }}</p>
             <div class="social-links">
               <a href="#" class="social">📘</a>
               <a href="#" class="social">📷</a>
@@ -36,32 +38,34 @@ import { RouterModule } from '@angular/router';
             </div>
           </div>
 
-          <!-- Links rápidos -->
+          <!-- Links rápidos - Destinos -->
           <div class="footer-links">
-            <h4>Destinos</h4>
+            <h4>{{ i18n.t('footer.destinos') }}</h4>
             <ul>
-              <li><a href="#">Europa</a></li>
-              <li><a href="#">América do Sul</a></li>
-              <li><a href="#">Ásia</a></li>
-              <li><a href="#">África</a></li>
+              <li><a href="#">{{ i18n.t('footer.europa') }}</a></li>
+              <li><a href="#">{{ i18n.t('footer.america_sul') }}</a></li>
+              <li><a href="#">{{ i18n.t('footer.asia') }}</a></li>
+              <li><a href="#">{{ i18n.t('footer.africa') }}</a></li>
             </ul>
           </div>
 
+          <!-- Links rápidos - Suporte -->
           <div class="footer-links">
-            <h4>Suporte</h4>
+            <h4>{{ i18n.t('footer.suporte') }}</h4>
             <ul>
-              <li><a href="#">Central de Ajuda</a></li>
-              <li><a href="#">Termos de Uso</a></li>
-              <li><a href="#">Política de Privacidade</a></li>
-              <li><a href="#">Contato</a></li>
+              <li><a href="#">{{ i18n.t('footer.central_ajuda') }}</a></li>
+              <li><a href="#">{{ i18n.t('footer.termos_uso') }}</a></li>
+              <li><a href="#">{{ i18n.t('footer.politica_privacidade') }}</a></li>
+              <li><a href="#">{{ i18n.t('footer.contato') }}</a></li>
             </ul>
           </div>
 
+          <!-- Newsletter -->
           <div class="footer-links">
-            <h4>Newsletter</h4>
-            <p class="newsletter-text">Receba ofertas exclusivas</p>
+            <h4>{{ i18n.t('footer.newsletter') }}</h4>
+            <p class="newsletter-text">{{ i18n.t('footer.newsletter_texto') }}</p>
             <div class="newsletter-form">
-              <input type="email" placeholder="Seu melhor email">
+              <input type="email" [placeholder]="i18n.t('footer.email_placeholder')">
               <button>→</button>
             </div>
             <div class="payment-methods">
@@ -74,11 +78,11 @@ import { RouterModule } from '@angular/router';
         </div>
 
         <div class="footer-bottom">
-          <p>&copy; 2026 Travelly - Todos os direitos reservados</p>
+          <p>{{ i18n.t('footer.copyright') }}</p>
           <div class="footer-badges">
-            <span class="badge">🌍 50+ Destinos</span>
-            <span class="badge">⭐ 4.8 Avaliação</span>
-            <span class="badge">🔒 Pagamento Seguro</span>
+            <span class="badge">🌍 {{ i18n.t('footer.badge_destinos') }}</span>
+            <span class="badge">⭐ {{ i18n.t('footer.badge_avaliacao') }}</span>
+            <span class="badge">🔒 {{ i18n.t('footer.badge_seguro') }}</span>
           </div>
         </div>
       </div>
@@ -240,6 +244,10 @@ import { RouterModule } from '@angular/router';
       border-color: #00D9FF;
     }
 
+    .newsletter-form input::placeholder {
+      color: #6B7280;
+    }
+
     .newsletter-form button {
       background: linear-gradient(135deg, #6C3BD4, #00D9FF);
       border: none;
@@ -326,4 +334,6 @@ import { RouterModule } from '@angular/router';
 })
 export class FooterComponent {
   ano = new Date().getFullYear();
+
+  constructor(public i18n: I18nService) {}
 }

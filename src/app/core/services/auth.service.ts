@@ -40,6 +40,13 @@ export class AuthService {
     );
   }
 
+  // REMOVA este método duplicado:
+  // isAdmin(): boolean {
+  //   const usuario = this.usuario();
+  //   if (!usuario) return false;
+  //   return usuario.tipo === 'admin';
+  // }
+
   registar(dados: { nome: string; email: string; senha: string }): Observable<any> {
     return this.http.post(`${this.apiUrl}/auth.php`, {
       action: 'registar',
