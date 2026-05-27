@@ -26,7 +26,13 @@ import { ThemeService } from '../../../../core/services/theme.service';
             {{ i18n.t('common.voltar') }}
           </button>
           <div class="title-section">
-            <div class="title-icon">✈️</div>
+            <div class="title-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M3 15L6 12L9 15L12 12L15 15L18 12L21 15"/>
+                <path d="M3 9L6 6L9 9L12 6L15 9L18 6L21 9"/>
+                <path d="M3 19L6 16L9 19L12 16L15 19L18 16L21 19"/>
+              </svg>
+            </div>
             <div>
               <h1>{{ i18n.t('gestao_viagens.titulo') }}</h1>
               <p>{{ i18n.t('gestao_viagens.subtitulo') }}</p>
@@ -45,26 +51,46 @@ import { ThemeService } from '../../../../core/services/theme.service';
       <div class="filters-card">
         <div class="filters-grid">
           <div class="filter-group">
-            <label>🔍 {{ i18n.t('common.buscar') }}</label>
+            <label>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+              {{ i18n.t('common.buscar') }}
+            </label>
             <input type="text" [(ngModel)]="filtroBusca" (input)="filtrarViagens()" [placeholder]="i18n.t('gestao_viagens.buscar_placeholder')">
           </div>
           <div class="filter-group">
-            <label>📊 {{ i18n.t('gestao_viagens.filtrar_status') }}</label>
+            <label>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7"/>
+                <rect x="14" y="3" width="7" height="7"/>
+                <rect x="3" y="14" width="7" height="7"/>
+                <rect x="14" y="14" width="7" height="7"/>
+              </svg>
+              {{ i18n.t('gestao_viagens.filtrar_status') }}
+            </label>
             <select [(ngModel)]="filtroStatus" (change)="filtrarViagens()">
               <option value="">{{ i18n.t('gestao_viagens.todos_status') }}</option>
-              <option value="confirmada">✅ {{ i18n.t('gestao_viagens.confirmadas') }}</option>
-              <option value="planejando">📝 {{ i18n.t('gestao_viagens.planejando') }}</option>
-              <option value="reservada">📅 {{ i18n.t('gestao_viagens.reservadas') }}</option>
-              <option value="aguardando_pagamento">⏳ {{ i18n.t('gestao_viagens.aguardando') }}</option>
+              <option value="confirmada">{{ i18n.t('gestao_viagens.confirmadas') }}</option>
+              <option value="planejando">{{ i18n.t('gestao_viagens.planejando') }}</option>
+              <option value="reservada">{{ i18n.t('gestao_viagens.reservadas') }}</option>
+              <option value="aguardando_pagamento">{{ i18n.t('gestao_viagens.aguardando') }}</option>
             </select>
           </div>
           <div class="filter-group">
-            <label>💰 {{ i18n.t('gestao_viagens.filtrar_pagamento') }}</label>
+            <label>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 6v6l4 2"/>
+              </svg>
+              {{ i18n.t('gestao_viagens.filtrar_pagamento') }}
+            </label>
             <select [(ngModel)]="filtroPagamento" (change)="filtrarViagens()">
               <option value="">{{ i18n.t('gestao_viagens.todos_pagamentos') }}</option>
-              <option value="pago">✅ {{ i18n.t('gestao_viagens.totalmente_pago') }}</option>
-              <option value="parcial">📊 {{ i18n.t('gestao_viagens.parcialmente_pago') }}</option>
-              <option value="nao_pago">❌ {{ i18n.t('gestao_viagens.nao_pago') }}</option>
+              <option value="pago">{{ i18n.t('gestao_viagens.totalmente_pago') }}</option>
+              <option value="parcial">{{ i18n.t('gestao_viagens.parcialmente_pago') }}</option>
+              <option value="nao_pago">{{ i18n.t('gestao_viagens.nao_pago') }}</option>
             </select>
           </div>
           <div class="filter-group">
@@ -112,14 +138,22 @@ import { ThemeService } from '../../../../core/services/theme.service';
                 </td>
                 <td>
                   <div class="destino-info">
-                    <span class="destino-icon">📍</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+                      <circle cx="12" cy="9" r="3"/>
+                    </svg>
                     {{ viagem.destino_nome }}
                   </div>
                 </td>
                 <td>
                   <div class="periodo-info">
                     <div>{{ viagem.data_inicio | date:'dd/MM/yy' }}</div>
-                    <div class="periodo-arrow">→</div>
+                    <div class="periodo-arrow">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                        <polyline points="12 5 19 12 12 19"/>
+                      </svg>
+                    </div>
                     <div>{{ viagem.data_fim | date:'dd/MM/yy' }}</div>
                   </div>
                 </td>
@@ -147,7 +181,10 @@ import { ThemeService } from '../../../../core/services/theme.service';
                       {{ i18n.t('gestao_viagens.falta') }}: {{ (viagem.orcamento - viagem.valor_pago) | number }} Kz
                     </div>
                     <div class="saldo pago" *ngIf="viagem.valor_pago >= viagem.orcamento">
-                      ✅ {{ i18n.t('gestao_viagens.totalmente_pago_texto') }}
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"/>
+                      </svg>
+                      {{ i18n.t('gestao_viagens.totalmente_pago_texto') }}
                     </div>
                   </div>
                 </td>
@@ -165,7 +202,7 @@ import { ThemeService } from '../../../../core/services/theme.service';
                       <path d="M12 10h4M12 14h2"/>
                     </svg>
                   </button>
-                  <button class="btn-delete" (click)="excluir(viagem.id)" title="{{ i18n.t('common.excluir') }}">
+                  <button class="btn-delete" (click)="abrirModalConfirmacao(viagem)" title="{{ i18n.t('common.excluir') }}">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <path d="M4 7h16M10 11v6M14 11v6M5 7l1 13a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-13M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/>
                     </svg>
@@ -174,7 +211,12 @@ import { ThemeService } from '../../../../core/services/theme.service';
               </tr>
               <tr *ngIf="viagensFiltradas.length === 0">
                 <td colspan="8" class="empty-state">
-                  <div class="empty-icon">📭</div>
+                  <div class="empty-icon">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+                      <circle cx="12" cy="12" r="10"/>
+                      <path d="M2 12H22M12 2C14.5 4.5 15.5 8 12 12C8.5 8 9.5 4.5 12 2Z"/>
+                    </svg>
+                  </div>
                   <p>{{ i18n.t('gestao_viagens.nenhuma_encontrada') }}</p>
                   <small>{{ i18n.t('gestao_viagens.ajuste_filtros') }}</small>
                 </td>
@@ -189,7 +231,12 @@ import { ThemeService } from '../../../../core/services/theme.service';
         <div class="modal-container" (click)="$event.stopPropagation()">
           <div class="modal-header">
             <div class="modal-title">
-              <span class="modal-icon">💰</span>
+              <span class="modal-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="2" y="5" width="20" height="14" rx="2" ry="2"/>
+                  <line x1="2" y1="10" x2="22" y2="10"/>
+                </svg>
+              </span>
               <h2>{{ i18n.t('gestao_viagens.registrar_pagamento') }}</h2>
             </div>
             <button class="modal-close" (click)="fecharModalPagamento()">✕</button>
@@ -229,23 +276,57 @@ import { ThemeService } from '../../../../core/services/theme.service';
               <div class="payment-methods">
                 <label class="payment-option">
                   <input type="radio" value="pagar_agora" [(ngModel)]="formaPagamento">
-                  <span>💳 {{ i18n.t('gestao_viagens.pagamento_vista') }}</span>
+                  <span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                      <circle cx="12" cy="12" r="10"/>
+                      <path d="M12 6v6l4 2"/>
+                    </svg>
+                    {{ i18n.t('gestao_viagens.pagamento_vista') }}
+                  </span>
                 </label>
                 <label class="payment-option">
                   <input type="radio" value="sinal" [(ngModel)]="formaPagamento">
-                  <span>📝 {{ i18n.t('gestao_viagens.sinal') }}</span>
+                  <span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                      <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+                    </svg>
+                    {{ i18n.t('gestao_viagens.sinal') }}
+                  </span>
                 </label>
                 <label class="payment-option">
                   <input type="radio" value="parcelar" [(ngModel)]="formaPagamento">
-                  <span>📆 {{ i18n.t('gestao_viagens.parcelado') }}</span>
+                  <span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                      <line x1="8" y1="2" x2="8" y2="6"/>
+                      <line x1="16" y1="2" x2="16" y2="6"/>
+                      <line x1="3" y1="10" x2="21" y2="10"/>
+                      <path d="M8 14H16M12 14V18"/>
+                    </svg>
+                    {{ i18n.t('gestao_viagens.parcelado') }}
+                  </span>
                 </label>
                 <label class="payment-option">
                   <input type="radio" value="transferencia" [(ngModel)]="formaPagamento">
-                  <span>🏦 {{ i18n.t('gestao_viagens.transferencia') }}</span>
+                  <span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                      <rect x="4" y="5" width="16" height="14" rx="2"/>
+                      <path d="M9 9h6M9 12h4"/>
+                    </svg>
+                    {{ i18n.t('gestao_viagens.transferencia') }}
+                  </span>
                 </label>
                 <label class="payment-option">
                   <input type="radio" value="multicaixa" [(ngModel)]="formaPagamento">
-                  <span>💳 {{ i18n.t('gestao_viagens.multicaixa') }}</span>
+                  <span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                      <rect x="2" y="5" width="20" height="14" rx="2" ry="2"/>
+                      <line x1="2" y1="10" x2="22" y2="10"/>
+                      <circle cx="7.5" cy="15.5" r="1.5"/>
+                      <circle cx="16.5" cy="15.5" r="1.5"/>
+                    </svg>
+                    {{ i18n.t('gestao_viagens.multicaixa') }}
+                  </span>
                 </label>
               </div>
             </div>
@@ -254,6 +335,39 @@ import { ThemeService } from '../../../../core/services/theme.service';
             <button class="btn-cancel" (click)="fecharModalPagamento()">{{ i18n.t('common.cancelar') }}</button>
             <button class="btn-save" (click)="registrarPagamento()" [disabled]="valorPagamento <= 0">
               {{ i18n.t('gestao_viagens.registrar_pagamento') }}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal de Confirmação de Exclusão -->
+      <div class="modal-overlay" *ngIf="modalConfirmacaoAberto" (click)="fecharModalConfirmacao()">
+        <div class="modal-container" (click)="$event.stopPropagation()">
+          <div class="modal-header">
+            <div class="modal-title">
+              <span class="modal-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="1.5">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="12" y1="8" x2="12" y2="12"/>
+                  <circle cx="12" cy="16" r="0.5" fill="currentColor"/>
+                </svg>
+              </span>
+              <h2>{{ i18n.t('modal.confirmar_exclusao.titulo') }}</h2>
+            </div>
+            <button class="modal-close" (click)="fecharModalConfirmacao()">✕</button>
+          </div>
+          <div class="modal-body">
+            <p>{{ i18n.t('modal.confirmar_exclusao.mensagem') }}</p>
+            <p class="viagem-info">
+              <strong>{{ viagemSelecionadaExcluir?.titulo || 'Viagem' }}</strong><br>
+              <span>{{ viagemSelecionadaExcluir?.destino_nome }} | {{ viagemSelecionadaExcluir?.cliente_nome }}</span>
+            </p>
+            <p class="aviso">{{ i18n.t('modal.confirmar_exclusao.aviso') }}</p>
+          </div>
+          <div class="modal-footer">
+            <button class="btn-cancel" (click)="fecharModalConfirmacao()">{{ i18n.t('common.cancelar') }}</button>
+            <button class="btn-confirm-delete" (click)="confirmarExclusao()" [disabled]="excluindo">
+              {{ excluindo ? i18n.t('common.excluindo') : i18n.t('common.excluir') }}
             </button>
           </div>
         </div>
@@ -276,23 +390,9 @@ import { ThemeService } from '../../../../core/services/theme.service';
     .btn-back { display: flex; align-items: center; gap: 8px; background: var(--bg-input); border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 12px; color: var(--color-secondary); cursor: pointer; font-size: 0.9rem; transition: all 0.3s; }
     .btn-back:hover { background: var(--bg-hover); transform: translateX(-3px); }
     
-    /* Language Selector */
-    .lang-selector { position: relative; }
-    .lang-btn { display: flex; align-items: center; gap: 6px; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: 8px; padding: 8px 12px; color: var(--color-secondary); cursor: pointer; font-size: 0.85rem; transition: all 0.2s; }
-    .lang-btn:hover { background: var(--bg-hover); }
-    .lang-icon { transition: transform 0.2s; }
-    .lang-selector:hover .lang-icon { transform: rotate(180deg); }
-    .lang-dropdown { position: absolute; top: 100%; right: 0; margin-top: 8px; background: var(--bg-card-solid); border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; min-width: 140px; z-index: 100; box-shadow: var(--shadow-lg); }
-    .lang-item { display: block; width: 100%; padding: 10px 16px; background: transparent; border: none; color: var(--text-secondary); font-size: 0.85rem; cursor: pointer; text-align: left; transition: all 0.2s; }
-    .lang-item:hover { background: var(--bg-hover); color: var(--color-secondary); }
-    .lang-item.active { background: var(--gradient-primary); color: white; }
-    
-    /* Theme Button */
-    .theme-btn { background: var(--bg-input); border: 1px solid var(--border-color); border-radius: 8px; width: 36px; height: 36px; cursor: pointer; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
-    .theme-btn:hover { background: var(--bg-hover); transform: scale(1.05); }
-    
     .title-section { display: flex; align-items: center; gap: 16px; }
-    .title-icon { font-size: 48px; background: var(--gradient-primary); border-radius: 20px; width: 64px; height: 64px; display: flex; align-items: center; justify-content: center; font-size: 32px; }
+    .title-icon { background: var(--gradient-primary); border-radius: 20px; width: 64px; height: 64px; display: flex; align-items: center; justify-content: center; }
+    .title-icon svg { stroke: white; }
     .title-section h1 { color: var(--text-primary); margin: 0 0 4px 0; font-size: 1.8rem; }
     .title-section p { color: var(--text-secondary); margin: 0; font-size: 0.85rem; }
     
@@ -302,7 +402,7 @@ import { ThemeService } from '../../../../core/services/theme.service';
     
     .filters-card { background: var(--bg-card); backdrop-filter: blur(10px); border: 1px solid var(--border-color); border-radius: 20px; padding: 20px; margin-bottom: 24px; }
     .filters-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
-    .filter-group label { display: block; color: var(--text-secondary); font-size: 0.75rem; margin-bottom: 6px; }
+    .filter-group label { display: flex; align-items: center; gap: 6px; color: var(--text-secondary); font-size: 0.75rem; margin-bottom: 6px; }
     .filter-group input, .filter-group select { width: 100%; padding: 10px 12px; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: 10px; color: var(--text-primary); font-size: 0.85rem; }
     .filter-group input:focus, .filter-group select:focus { outline: none; border-color: var(--color-secondary); }
     
@@ -325,9 +425,8 @@ import { ThemeService } from '../../../../core/services/theme.service';
     .cliente-info strong { color: var(--text-primary); font-size: 0.85rem; }
     .cliente-info small { font-size: 0.7rem; color: var(--color-secondary); }
     .destino-info { display: flex; align-items: center; gap: 6px; }
-    .destino-icon { font-size: 14px; }
     .periodo-info { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; }
-    .periodo-arrow { color: var(--color-secondary); }
+    .periodo-arrow { color: var(--color-secondary); display: flex; align-items: center; }
     
     .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 5px 14px; border-radius: 20px; font-size: 0.75rem; font-weight: 500; }
     .status-icon { font-size: 0.75rem; }
@@ -343,7 +442,7 @@ import { ThemeService } from '../../../../core/services/theme.service';
     .progress-bar { flex: 1; height: 6px; background: var(--bg-tertiary); border-radius: 3px; overflow: hidden; }
     .progress-fill { height: 100%; background: var(--gradient-primary); border-radius: 3px; transition: width 0.3s; }
     .percentual { font-size: 0.7rem; font-weight: 500; color: var(--color-secondary); }
-    .saldo { font-size: 0.7rem; color: #EF4444; margin-top: 4px; }
+    .saldo { font-size: 0.7rem; color: #EF4444; margin-top: 4px; display: flex; align-items: center; gap: 4px; }
     .saldo.pago { color: #10B981; }
     
     .actions { display: flex; gap: 8px; }
@@ -354,7 +453,7 @@ import { ThemeService } from '../../../../core/services/theme.service';
     .btn-view:hover, .btn-pagar:hover, .btn-delete:hover { transform: scale(1.1); }
     
     .empty-state { text-align: center; padding: 60px; }
-    .empty-icon { font-size: 48px; margin-bottom: 16px; }
+    .empty-icon { margin-bottom: 16px; stroke: var(--text-secondary); }
     .empty-state p { color: var(--text-primary); margin: 0; }
     .empty-state small { color: var(--text-secondary); }
     
@@ -363,8 +462,8 @@ import { ThemeService } from '../../../../core/services/theme.service';
     @keyframes modalFadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
     .modal-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 24px; border-bottom: 1px solid var(--border-color); }
     .modal-title { display: flex; align-items: center; gap: 12px; }
-    .modal-icon { font-size: 24px; }
-    .modal-title h2 { color: var(--text-primary); margin: 0; }
+    .modal-icon { display: flex; align-items: center; }
+    .modal-title h2 { color: var(--text-primary); margin: 0; font-size: 1.2rem; }
     .modal-close { background: none; border: none; color: var(--text-secondary); font-size: 24px; cursor: pointer; transition: color 0.2s; }
     .modal-close:hover { color: #EF4444; }
     .modal-body { padding: 24px; }
@@ -375,6 +474,10 @@ import { ThemeService } from '../../../../core/services/theme.service';
     .summary-value { color: var(--text-primary); font-weight: 500; }
     .summary-value.highlight { color: var(--color-secondary); font-size: 1.1rem; }
     .saldo-restante { color: #EF4444; }
+    .viagem-info { background: var(--bg-hover); padding: 12px; border-radius: 8px; text-align: center; margin: 16px 0; }
+    .viagem-info strong { color: var(--text-primary); display: block; margin-bottom: 4px; }
+    .viagem-info span { color: var(--text-secondary); font-size: 0.85rem; }
+    .aviso { color: #EF4444 !important; font-size: 0.85rem; margin-top: 8px; text-align: center; }
     .form-group { margin-bottom: 20px; }
     .form-group label { display: block; color: var(--text-secondary); margin-bottom: 8px; font-size: 0.85rem; }
     .form-control { width: 100%; padding: 12px; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: 12px; color: var(--text-primary); font-size: 1rem; }
@@ -383,99 +486,41 @@ import { ThemeService } from '../../../../core/services/theme.service';
     .payment-option { display: flex; align-items: center; gap: 8px; padding: 10px; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: 10px; cursor: pointer; transition: all 0.2s; }
     .payment-option:hover { border-color: var(--color-secondary); background: var(--bg-hover); }
     .payment-option input { accent-color: var(--color-secondary); }
-    .payment-option span { color: var(--text-secondary); font-size: 0.85rem; }
+    .payment-option span { color: var(--text-secondary); font-size: 0.85rem; display: inline-flex; align-items: center; gap: 6px; }
     .modal-footer { display: flex; justify-content: flex-end; gap: 12px; padding: 20px 24px; border-top: 1px solid var(--border-color); }
-    .btn-cancel, .btn-save { padding: 10px 24px; border-radius: 10px; cursor: pointer; font-weight: 500; transition: all 0.2s; }
+    .btn-cancel, .btn-save, .btn-confirm-delete { padding: 10px 24px; border-radius: 10px; cursor: pointer; font-weight: 500; transition: all 0.2s; }
     .btn-cancel { background: transparent; border: 1px solid #EF4444; color: #EF4444; }
     .btn-cancel:hover { background: rgba(239,68,68,0.1); }
     .btn-save { background: var(--gradient-primary); border: none; color: white; }
     .btn-save:hover:not(:disabled) { transform: translateY(-2px); box-shadow: var(--shadow-md); }
     .btn-save:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-confirm-delete { background: #EF4444; border: none; color: white; }
+    .btn-confirm-delete:hover:not(:disabled) { transform: translateY(-2px); background: #dc2626; }
+    .btn-confirm-delete:disabled { opacity: 0.5; cursor: not-allowed; }
     
     @media (max-width: 768px) {
       .page-header { flex-direction: column; align-items: flex-start; }
       .header-right { width: 100%; justify-content: flex-end; }
+      .payment-methods { grid-template-columns: 1fr; }
     }
 
     /* Light Mode */
     body.light-theme .viagens-container {
       background: linear-gradient(135deg, #F8FAFC 0%, #E2E8F0 100%);
     }
-    
-    body.light-theme .btn-back {
-      background: #FFFFFF;
-      border-color: #E2E8F0;
-      color: #3B82F6;
-    }
-    body.light-theme .btn-back:hover {
-      background: #F1F5F9;
-    }
-    
-    body.light-theme .lang-btn {
-      background: #FFFFFF;
-      border-color: #E2E8F0;
-      color: #3B82F6;
-    }
-    body.light-theme .lang-btn:hover {
-      background: #F1F5F9;
-    }
-    body.light-theme .lang-dropdown {
-      background: #FFFFFF;
-      border-color: #E2E8F0;
-    }
-    body.light-theme .lang-item {
-      color: #64748B;
-    }
-    body.light-theme .lang-item:hover {
-      background: #F1F5F9;
-      color: #3B82F6;
-    }
-    
-    body.light-theme .theme-btn {
-      background: #FFFFFF;
-      border-color: #E2E8F0;
-    }
-    body.light-theme .theme-btn:hover {
-      background: #F1F5F9;
-    }
-    
-    body.light-theme .filters-card {
-      background: #FFFFFF;
-      border-color: #E2E8F0;
-    }
-    body.light-theme .filter-group input, 
-    body.light-theme .filter-group select {
-      background: #F9FAFB;
-      border-color: #E2E8F0;
-      color: #1E293B;
-    }
-    
-    body.light-theme .table-card {
-      background: #FFFFFF;
-      border-color: #E2E8F0;
-    }
-    body.light-theme .viagens-table th {
-      background: #F8FAFC;
-    }
-    
-    body.light-theme .modal-container {
-      background: #FFFFFF;
-    }
-    body.light-theme .modal-title h2 {
-      color: #1E293B;
-    }
-    body.light-theme .form-control {
-      background: #F9FAFB;
-      border-color: #E2E8F0;
-      color: #1E293B;
-    }
-    body.light-theme .payment-option {
-      background: #F9FAFB;
-      border-color: #E2E8F0;
-    }
-    body.light-theme .payment-option span {
-      color: #64748B;
-    }
+    body.light-theme .btn-back { background: #FFFFFF; border-color: #E2E8F0; color: #3B82F6; }
+    body.light-theme .btn-back:hover { background: #F1F5F9; }
+    body.light-theme .filters-card { background: #FFFFFF; border-color: #E2E8F0; }
+    body.light-theme .filter-group input, body.light-theme .filter-group select { background: #F9FAFB; border-color: #E2E8F0; color: #1E293B; }
+    body.light-theme .table-card { background: #FFFFFF; border-color: #E2E8F0; }
+    body.light-theme .viagens-table th { background: #F8FAFC; }
+    body.light-theme .modal-container { background: #FFFFFF; }
+    body.light-theme .modal-title h2 { color: #1E293B; }
+    body.light-theme .form-control { background: #F9FAFB; border-color: #E2E8F0; color: #1E293B; }
+    body.light-theme .payment-option { background: #F9FAFB; border-color: #E2E8F0; }
+    body.light-theme .payment-option span { color: #64748B; }
+    body.light-theme .viagem-info { background: #F8FAFC; }
+    body.light-theme .viagem-info strong { color: #1E293B; }
   `]
 })
 export class GestaoViagens implements OnInit {
@@ -485,12 +530,16 @@ export class GestaoViagens implements OnInit {
   filtroBusca = '';
   filtroStatus = '';
   filtroPagamento = '';
-  langMenuOpen = false;
   
   modalPagamentoAberto = false;
   viagemSelecionada: any = null;
   valorPagamento: number = 0;
   formaPagamento: string = 'pagar_agora';
+  
+  // Modal de confirmação de exclusão
+  modalConfirmacaoAberto = false;
+  viagemSelecionadaExcluir: any = null;
+  excluindo = false;
 
   constructor(
     private viagemService: ViagemService,
@@ -501,13 +550,7 @@ export class GestaoViagens implements OnInit {
     private router: Router,
     public i18n: I18nService,
     public themeService: ThemeService
-  ) {
-    document.addEventListener('click', (event) => {
-      if (!(event.target as Element).closest('.lang-selector')) {
-        this.langMenuOpen = false;
-      }
-    });
-  }
+  ) {}
 
   ngOnInit() {
     this.carregarViagens();
@@ -515,24 +558,6 @@ export class GestaoViagens implements OnInit {
 
   voltar() {
     this.router.navigate(['/admin/dashboard']);
-  }
-
-  getCurrentLangLabel(): string {
-    const labels = { pt: 'PT', en: 'EN', fr: 'FR' };
-    return labels[this.i18n.getCurrentLang()];
-  }
-
-  toggleLangMenu() {
-    this.langMenuOpen = !this.langMenuOpen;
-  }
-
-  setLanguage(lang: 'pt' | 'en' | 'fr') {
-    this.i18n.setLanguage(lang);
-    this.langMenuOpen = false;
-  }
-
-  toggleTheme() {
-    this.themeService.toggleTheme();
   }
 
   getStatusIcon(status: string): string {
@@ -588,7 +613,6 @@ export class GestaoViagens implements OnInit {
                     };
                   });
                   this.filtrarViagens();
-                  this.notificationService.success(`${this.i18n.t('gestao_viagens.carregadas')} ${this.viagens.length} ${this.i18n.t('gestao_viagens.viagens')}`);
                 }
                 this.cdr.detectChanges();
               },
@@ -682,21 +706,53 @@ export class GestaoViagens implements OnInit {
     this.router.navigate(['/viagem', id]);
   }
 
-  excluir(id: number) {
-    if (confirm(this.i18n.t('gestao_viagens.confirmar_excluir'))) {
-      this.viagemService.deletar(id).subscribe({
-        next: (response: any) => {
-          if (response && response.success) {
-            this.notificationService.success(this.i18n.t('gestao_viagens.sucesso_excluir'));
-            this.carregarViagens();
-          } else {
-            this.notificationService.error(this.i18n.t('common.erro'));
-          }
-        },
-        error: () => {
-          this.notificationService.error(this.i18n.t('common.erro_conexao'));
-        }
-      });
-    }
+  abrirModalConfirmacao(viagem: any) {
+    this.viagemSelecionadaExcluir = viagem;
+    this.modalConfirmacaoAberto = true;
   }
+
+  fecharModalConfirmacao() {
+    this.modalConfirmacaoAberto = false;
+    this.viagemSelecionadaExcluir = null;
+    this.excluindo = false;
+  }
+
+  confirmarExclusao() {
+  if (!this.viagemSelecionadaExcluir) {
+    this.notificationService.error('Nenhuma viagem selecionada');
+    return;
+  }
+  
+  const viagemId = this.viagemSelecionadaExcluir.id;
+  
+  this.excluindo = true;
+  
+  // DELETE com ID no body (funcionou no teste)
+  fetch(`http://localhost/travel/api/viagens.php`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ id: viagemId })
+  })
+  .then(response => response.json())
+  .then(data => {
+    this.excluindo = false;
+    
+    if (data && data.success) {
+      this.notificationService.success('Viagem excluída com sucesso!');
+      this.fecharModalConfirmacao();
+      this.carregarViagens(); // Recarrega a lista
+    } else {
+      this.notificationService.error(data?.message || 'Erro ao excluir viagem');
+      this.fecharModalConfirmacao();
+    }
+  })
+  .catch(error => {
+    console.error('Erro na exclusão:', error);
+    this.excluindo = false;
+    this.notificationService.error('Erro de conexão com o servidor');
+    this.fecharModalConfirmacao();
+  });
+}
 }

@@ -34,28 +34,6 @@ import { ThemeService } from '../../../../core/services/theme.service';
           </h1>
         </div>
         <div class="header-right">
-          <div class="lang-selector">
-            <button class="lang-btn" (click)="toggleLangMenu()">
-              <span class="lang-code">{{ getCurrentLangLabel() }}</span>
-              <svg class="lang-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="6 9 12 15 18 9"></polyline>
-              </svg>
-            </button>
-            <div class="lang-dropdown" *ngIf="langMenuOpen">
-              <button (click)="setLanguage('pt')" class="lang-item" [class.active]="i18n.getCurrentLang() === 'pt'">🇵🇹 Português</button>
-              <button (click)="setLanguage('en')" class="lang-item" [class.active]="i18n.getCurrentLang() === 'en'">🇬🇧 English</button>
-              <button (click)="setLanguage('fr')" class="lang-item" [class.active]="i18n.getCurrentLang() === 'fr'">🇫🇷 Français</button>
-            </div>
-          </div>
-          <button class="theme-btn" (click)="toggleTheme()">
-            <svg *ngIf="themeService.isDark()" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-              <circle cx="12" cy="12" r="6" stroke="currentColor" stroke-width="1.8"/>
-              <path d="M12 2V3M12 21V22M22 12H21M3 12H2M19.07 4.93L18.36 5.64M5.64 18.36L4.93 19.07M19.07 19.07L18.36 18.36M5.64 5.64L4.93 4.93" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-            </svg>
-            <svg *ngIf="!themeService.isDark()" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <path d="M21 12.79C20.8427 14.4922 20.2039 16.1144 19.1583 17.4668C18.1127 18.8192 16.7035 19.8458 15.0957 20.4265C13.4879 21.0073 11.748 21.1181 10.0795 20.7461C8.41104 20.3741 6.88299 19.5345 5.67423 18.3258C4.46548 17.117 3.62591 15.589 3.25388 13.9205C2.88186 12.252 2.9927 10.5121 3.57346 8.9043C4.15423 7.2965 5.18079 5.88731 6.53318 4.8417C7.88557 3.79609 9.50776 3.15731 11.21 3C10.2133 4.34827 9.73383 6.00945 9.85853 7.68141C9.98323 9.35338 10.7039 10.9251 11.8894 12.1106C13.0749 13.2961 14.6466 14.0168 16.3186 14.1415C17.9906 14.2662 19.6518 13.7867 21 12.79Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
           <button class="btn-refresh" (click)="carregarUsuarios()">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
@@ -164,17 +142,6 @@ import { ThemeService } from '../../../../core/services/theme.service';
     .btn-back:hover { background: var(--bg-hover); transform: translateX(-2px); }
     .page-header h1 { display: inline-flex; align-items: center; gap: 8px; color: var(--text-primary); margin: 0; font-size: 1.8rem; }
     .header-icon { stroke: var(--color-secondary); }
-    .lang-selector { position: relative; }
-    .lang-btn { display: flex; align-items: center; gap: 6px; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: 8px; padding: 8px 12px; color: var(--color-secondary); cursor: pointer; font-size: 0.85rem; }
-    .lang-btn:hover { background: var(--bg-hover); }
-    .lang-icon { transition: transform 0.2s; }
-    .lang-selector:hover .lang-icon { transform: rotate(180deg); }
-    .lang-dropdown { position: absolute; top: 100%; right: 0; margin-top: 8px; background: var(--bg-card-solid); border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; min-width: 140px; z-index: 100; box-shadow: var(--shadow-lg); }
-    .lang-item { display: block; width: 100%; padding: 10px 16px; background: transparent; border: none; color: var(--text-secondary); font-size: 0.85rem; cursor: pointer; text-align: left; transition: all 0.2s; }
-    .lang-item:hover { background: var(--bg-hover); color: var(--color-secondary); }
-    .lang-item.active { background: var(--gradient-primary); color: white; }
-    .theme-btn { background: var(--bg-input); border: 1px solid var(--border-color); border-radius: 8px; width: 36px; height: 36px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
-    .theme-btn:hover { background: var(--bg-hover); transform: scale(1.05); }
     .btn-refresh { display: inline-flex; align-items: center; gap: 8px; background: var(--gradient-primary); border: none; padding: 10px 24px; border-radius: 8px; color: white; cursor: pointer; font-weight: 500; transition: all 0.2s; }
     .btn-refresh:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
     .table-container { background: var(--bg-card); border-radius: 12px; overflow-x: auto; border: 1px solid var(--border-color); min-height: 400px; }
@@ -214,17 +181,13 @@ import { ThemeService } from '../../../../core/services/theme.service';
     .btn-confirm-delete { background: #EF4444; border: none; color: white; }
     .btn-confirm-delete:hover:not(:disabled) { transform: translateY(-2px); background: #dc2626; }
     .btn-confirm-delete:disabled { opacity: 0.5; cursor: not-allowed; }
-    @media (max-width: 768px) { .page-header { flex-direction: column; align-items: flex-start; } .header-right { width: 100%; justify-content: flex-end; } }
+    @media (max-width: 768px) { 
+      .page-header { flex-direction: column; align-items: flex-start; } 
+      .header-right { width: 100%; justify-content: flex-end; } 
+    }
     body.light-theme .admin-page { background: linear-gradient(135deg, #F8FAFC 0%, #E2E8F0 100%); }
     body.light-theme .btn-back { background: #FFFFFF; border-color: #E2E8F0; color: #3B82F6; }
     body.light-theme .btn-back:hover { background: #F1F5F9; }
-    body.light-theme .lang-btn { background: #FFFFFF; border-color: #E2E8F0; color: #3B82F6; }
-    body.light-theme .lang-btn:hover { background: #F1F5F9; }
-    body.light-theme .lang-dropdown { background: #FFFFFF; border-color: #E2E8F0; }
-    body.light-theme .lang-item { color: #64748B; }
-    body.light-theme .lang-item:hover { background: #F1F5F9; color: #3B82F6; }
-    body.light-theme .theme-btn { background: #FFFFFF; border-color: #E2E8F0; }
-    body.light-theme .theme-btn:hover { background: #F1F5F9; }
     body.light-theme .table-container { background: #FFFFFF; border-color: #E2E8F0; }
     body.light-theme .admin-table th { background: #F8FAFC; }
     body.light-theme .modal-container { background: #FFFFFF; }
@@ -236,7 +199,6 @@ export class GestaoUsuarios implements OnInit {
   usuarios: Usuario[] = [];
   adminId: number = 0;
   carregando = true;
-  langMenuOpen = false;
   
   modalConfirmacaoAberto = false;
   usuarioSelecionado: Usuario | null = null;
@@ -250,13 +212,7 @@ export class GestaoUsuarios implements OnInit {
     private router: Router,
     public i18n: I18nService,
     public themeService: ThemeService
-  ) {
-    document.addEventListener('click', (event) => {
-      if (!(event.target as Element).closest('.lang-selector')) {
-        this.langMenuOpen = false;
-      }
-    });
-  }
+  ) {}
 
   ngOnInit() {
     const usuario = this.authService.usuario();
@@ -268,24 +224,6 @@ export class GestaoUsuarios implements OnInit {
 
   voltar() {
     this.router.navigate(['/admin/dashboard']);
-  }
-
-  getCurrentLangLabel(): string {
-    const labels = { pt: 'PT', en: 'EN', fr: 'FR' };
-    return labels[this.i18n.getCurrentLang()];
-  }
-
-  toggleLangMenu() {
-    this.langMenuOpen = !this.langMenuOpen;
-  }
-
-  setLanguage(lang: 'pt' | 'en' | 'fr') {
-    this.i18n.setLanguage(lang);
-    this.langMenuOpen = false;
-  }
-
-  toggleTheme() {
-    this.themeService.toggleTheme();
   }
 
   carregarUsuarios() {
